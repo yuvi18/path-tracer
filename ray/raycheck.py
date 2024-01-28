@@ -663,7 +663,7 @@ def main():
         "--refbin",
         metavar="RAY.STD",
         help="Executable file for the reference ray tracer",
-        default="ray-solution",
+        default="./ray-solution",
     )
     parser.add_argument(
         "--scenes",
