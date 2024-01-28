@@ -9,12 +9,15 @@ from colorama import Fore, Style
 from zipfile import ZipFile
 import tarfile
 
+
 def _msg(text, level, color):
-    return Style.BRIGHT+color+level+Fore.RESET+Style.NORMAL+text
+    return Style.BRIGHT + color + level + Fore.RESET + Style.NORMAL + text
+
 
 def _dir(text):
     index = text.rfind('/')
     return text[:index]
+
 
 def try_zip(fn):
     try:
@@ -23,6 +26,7 @@ def try_zip(fn):
     except:
         return None
 
+
 def try_tar(fn):
     try:
         with tarfile.open(fn, 'r:*') as tar:
@@ -30,18 +34,20 @@ def try_tar(fn):
     except:
         return None
 
+
 ARCHIVE_HANDLERS = [try_zip, try_tar]
 
 CRITERIA = [
-        (re.compile('.*\.git/'), 'Git repository at {adir} is not removed'),
-        (re.compile('.*/CMakeCache\.txt$'), 'Build directory {adir} is not removed'),
-        (re.compile('.*\.o$'), 'Object file {afile} is not removed'),
-        (re.compile('.*\.ray$'), 'Ray file at {afile} is not removed'),
-        (re.compile('.*\.bmp$'), 'Image file at {afile} is not removed'),
-        (re.compile('.*\.pmd$'), 'PMD file at {afile} is not removed'),
-        (re.compile('.*\.jp[e]?g$'), 'Image file at {afile} is not removed'),
-        (re.compile('.*\._.*'), 'macOS ._ file at {afile} is not removed'),
-            ]
+    (re.compile('.*\.git/'), 'Git repository at {adir} is not removed'),
+    (re.compile('.*/CMakeCache\.txt$'), 'Build directory {adir} is not removed'),
+    (re.compile('.*\.o$'), 'Object file {afile} is not removed'),
+    (re.compile('.*\.ray$'), 'Ray file at {afile} is not removed'),
+    (re.compile('.*\.bmp$'), 'Image file at {afile} is not removed'),
+    (re.compile('.*\.pmd$'), 'PMD file at {afile} is not removed'),
+    (re.compile('.*\.jp[e]?g$'), 'Image file at {afile} is not removed'),
+    (re.compile('.*\._.*'), 'macOS ._ file at {afile} is not removed'),
+]
+
 
 class ArchiveChecker:
     fn = None
@@ -49,7 +55,7 @@ class ArchiveChecker:
     problems = None
 
     def __init__(self,
-            fn):
+                 fn):
         self.problems = []
         for handler in ARCHIVE_HANDLERS:
             files = handler(fn)
@@ -126,6 +132,7 @@ class ArchiveChecker:
         if self.project_name is None:
             self.bug('{file} is probably not archiving a course project')
 
+
 def sancheck(fn, args):
     print(_msg('', '==========SANITY CHECKING {}=========='.format(fn), Fore.WHITE))
     ac = ArchiveChecker(fn)
@@ -133,12 +140,13 @@ def sancheck(fn, args):
     ac.report_problems()
     print(_msg('', '----------END OF CHECKING {}----------'.format(fn), Fore.WHITE))
 
+
 if __name__ == '__main__':
     colorama.init()
     parser = argparse.ArgumentParser(description='Sanity check on your archive for submission.',
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('files', metavar='FILE', nargs='+',
-            help='Archives to check')
+                        help='Archives to check')
     args = parser.parse_args()
     for f in args.files:
         sancheck(f, args)
