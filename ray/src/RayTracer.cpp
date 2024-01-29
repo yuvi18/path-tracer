@@ -27,7 +27,7 @@ extern TraceUI *traceUI;
 
 // Use this variable to decide if you want to print out debugging messages. Gets
 // set in the "trace single ray" mode in TraceGLWindow, for example.
-bool debugMode = false;
+bool debugMode = true;
 
 // Trace a top-level ray through pixel(i,j), i.e. normalized window coordinates
 // (x,y), through the projection plane, and out into the scene. All we do is
@@ -244,6 +244,11 @@ void RayTracer::traceImage(int w, int h) {
   //
   //       An asynchronous traceImage lets the GUI update your results
   //       while rendering.
+  for(int i = 0; i < w; i++){
+      for(int j = 0; j < h; j++){
+          tracePixel(i, j);
+      }
+  }
 }
 
 int RayTracer::aaImage() {
