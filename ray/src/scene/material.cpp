@@ -44,7 +44,8 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // }
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
-  finalShade += ka(i);
+  glm::dvec3 ambientComponent = ka(i) * scene->ambient()
+  finalShade += ambientComponent;
   finalShade += kd(i);
   cout << finalShade << endl;
   return finalShade;
