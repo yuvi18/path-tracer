@@ -42,7 +42,12 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // 		.
   // 		.
   // }
-  return kd(i);
+  glm::dvec3 finalShade(0, 0, 0);
+  //Always add ambient light.
+  finalShade += ka(i);
+  finalShade += kd(i);
+  cout << finalShade << endl;
+  return finalShade;
 }
 
 TextureMap::TextureMap(string filename) {
