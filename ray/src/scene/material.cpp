@@ -54,7 +54,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
             //Diffusion Term
             glm::dvec3 contributionD = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
             contributionD *= kd(i);
-            contributionD *= glm::max(0.0, glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
+            contributionD *= glm::abs(glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
             diffuseTerm += contributionD;
 
             //Specular Term
