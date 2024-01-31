@@ -42,6 +42,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // 		.
   // 		.
   // }
+  glm::dvec3 pointOfImpact = r.getPosition() + r.getDirection() * i.getT();
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
   glm::dvec3 ambientTerm = ka(i) * scene->ambient();
@@ -49,13 +50,14 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   for ( const auto& pLight : scene->getAllLights() ){
         //Check colision
         if(true){
-            glm::dvec3 contribution = pLight->getColor() * pLight->distanceAttenuation(i);
+            glm::dvec3 contribution = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
             contribution *= kd(i);
+            contribution *= glm::dot(i.getN(), pLight->getDirection(pointOfImpact));
+            diffuseTerm += contribution;
         }
   }
   finalShade += ambientTerm;
   finalShade += diffuseTerm;
-  cout << finalShade << endl;
   return finalShade;
 }
 
