@@ -42,7 +42,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // 		.
   // 		.
   // }
-  glm::dvec3 pointOfImpact = r.getPosition() + r.getDirection() * i.getT();
+  glm::dvec3 pointOfImpact = r.at(i.getT());
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
   glm::dvec3 ambientTerm = ka(i) * scene->ambient();
@@ -52,14 +52,23 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   for ( const auto& pLight : scene->getAllLights() ){
         //TODO: Check colision
         if(true){
-            glm::dvec3 contribution = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
-            contribution *= kd(i);
-            contribution *= glm::dot(i.getN(), pLight->getDirection(pointOfImpact));
-            diffuseTerm += contribution;
+            glm::dvec3 contributionD = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
+            contributionD *= kd(i);
+            contributionD *= glm::dot(i.getN(), pLight->getDirection(pointOfImpact));
+            diffuseTerm += contributionD;
+
+            glm::dvec3 contributionS = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
+            contributionS *= ks(i);
+            glm::dvec3 v = -1.0 * r.getDirection();
+            glm::dvec3 r = glm::reflect(pLight->getDirection(pointOfImpact), i.getN());
+            contributionS *= glm::pow(glm::max(0.0, glm::dot(v, r)), shininess(i));
+            specularTerm += contributionS;
+            cout << specularTerm << endl;
         }
   }
   finalShade += ambientTerm;
   finalShade += diffuseTerm;
+  finalShade += specularTerm;
   return finalShade;
 }
 
