@@ -18,13 +18,16 @@ public:
   virtual double distanceAttenuation(const glm::dvec3 &P) const = 0;
   virtual glm::dvec3 getColor() const = 0;
   virtual glm::dvec3 getDirection(const glm::dvec3 &P) const = 0;
-
+  bool isPoint(){
+      return pointLight;
+  }
 
 protected:
   Light(Scene *scene, const glm::dvec3 &col)
       : SceneElement(scene), color(col) {}
 
   glm::dvec3 color;
+  bool pointLight;
 
 public:
   virtual void glDrawLight([[maybe_unused]] GLenum lightID) const {}
@@ -35,7 +38,9 @@ class DirectionalLight : public Light {
 public:
   DirectionalLight(Scene *scene, const glm::dvec3 &orien,
                    const glm::dvec3 &color)
-      : Light(scene, color), orientation(glm::normalize(orien)) {}
+      : Light(scene, color), orientation(glm::normalize(orien)) {
+      pointLight = false;
+  }
   virtual glm::dvec3 shadowAttenuation(const ray &r,
                                        const glm::dvec3 &pos) const;
   virtual double distanceAttenuation(const glm::dvec3 &P) const;
@@ -58,7 +63,9 @@ public:
       : Light(scene, color), position(pos),
         constantTerm(constantAttenuationTerm),
         linearTerm(linearAttenuationTerm),
-        quadraticTerm(quadraticAttenuationTerm) {}
+        quadraticTerm(quadraticAttenuationTerm){
+      pointLight = true;
+  }
 
   virtual glm::dvec3 shadowAttenuation(const ray &r,
                                        const glm::dvec3 &pos) const;
