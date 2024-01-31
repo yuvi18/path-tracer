@@ -47,8 +47,10 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   //Always add ambient light.
   glm::dvec3 ambientTerm = ka(i) * scene->ambient();
   glm::dvec3 diffuseTerm(0, 0, 0);
+  //TODO: FINISH SPECULAR TERM
+  glm::dvec3 specularTerm(0, 0, 0);
   for ( const auto& pLight : scene->getAllLights() ){
-        //Check colision
+        //TODO: Check colision
         if(true){
             glm::dvec3 contribution = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
             contribution *= kd(i);
