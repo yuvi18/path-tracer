@@ -4,6 +4,7 @@
 #include <cmath>
 #include <float.h>
 #include <string.h>
+#include <iostream>
 #include "../ui/TraceUI.h"
 extern TraceUI *traceUI;
 extern TraceUI *traceUI;
@@ -96,8 +97,43 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
      - If neither is true, assign the parent's material to the intersection.
   */
 
+  //Get Triangle Coords
+  Trimesh* parent = this->getParent();
+  glm::dvec3 a = parent->vertices[this->ids[0]];
+  glm::dvec3 b = parent->vertices[this->ids[1]];
+  glm::dvec3 c = parent->vertices[this->ids[2]];
+  //Check to see if it intersects the plane
+  glm::dvec3 origin = r.getPosition();
+  glm::dvec3 direction = r.getDirection();
+  glm::dvec3 normal = getNormal();
+  double denom = glm::dot(normal, direction);
+  //Parallel to plane.
+  if(denom == 0){
+      return false;
+  }
+  //Use point a to define the plane
+
+  double num = glm::dot(normal, a - origin);
+  assert(glm::dot(normal, a - origin) == glm::dot(normal, b - origin));
+  double t = num / denom;
+  //Object was before ray cast
+  if(t < 0){
+      return false;
+  }
+
+  glm::dvec3 intersectPoint = r.at(t);
+  //Check if point is in triangle
+  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
+  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
+  double check3 = glm::dot(glm::cross(a - c, intersectPoint - c), normal);
+  if(check1 < 0  || check2 < 0 || check3 < 0){
+      return false;
+  }
+  i.setT(t);
   i.setObject(this->parent);
-  return false;
+  i.setMaterial(parent->material);
+  i.setN(normal);
+  return true;
 }
 
 // Once all the verts and faces are loaded, per vertex normals can be
