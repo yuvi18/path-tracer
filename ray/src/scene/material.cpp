@@ -66,6 +66,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
             specularTerm += contributionS;
         }
   }
+
   finalShade += ambientTerm;
   finalShade += diffuseTerm;
   finalShade += specularTerm;
