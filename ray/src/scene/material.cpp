@@ -42,15 +42,40 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // 		.
   // 		.
   // }
-  glm::dvec3 pointOfImpact = r.at(i.getT());
+  glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
   glm::dvec3 ambientTerm = ka(i) * scene->ambient();
   glm::dvec3 diffuseTerm(0, 0, 0);
   glm::dvec3 specularTerm(0, 0, 0);
   for ( const auto& pLight : scene->getAllLights() ){
-        //TODO: Check colision
-        if(true){
+        bool collided = false;
+        if(pLight->isPoint()){
+            //Shoot a ray to the point's light direction
+            glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
+            glm::dvec3 fireDirection = glm::normalize(pLight->getDirection(firePos));
+            glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
+            ray shadowRay(firePos, fireDirection, fireWeight);
+            isect point;
+            scene->intersect(shadowRay, point);
+            double lightT = glm::sqrt(glm::dot(pLight->getDirection(firePos), pLight->getDirection(firePos)));
+            if(lightT < point.getT()){
+                collided = true;
+            }
+        }
+        else{
+            //Shoot a ray to the directional's light direction
+            glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
+            glm::dvec3 fireDirection = pLight->getDirection(firePos);
+            glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
+            ray shadowRay(firePos, fireDirection, fireWeight);
+            isect point;
+            scene->intersect(shadowRay, point);
+            if(point.getT() == 1000){
+                collided = true;
+            }
+        }
+        if(collided){
             //Diffusion Term
             glm::dvec3 contributionD = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
             contributionD *= kd(i);
