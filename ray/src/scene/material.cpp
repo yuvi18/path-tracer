@@ -36,13 +36,13 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
         if(pLight->isPoint()){
             //Shoot a ray to the point's light direction
             glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
-            glm::dvec3 fireDirection = glm::normalize(pLight->getDirection(firePos));
+            glm::dvec3 fireDirection = pLight->getDirection(firePos);
             glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
             ray shadowRay(firePos, fireDirection, fireWeight);
             isect point;
             scene->intersect(shadowRay, point);
-            double lightT = glm::sqrt(glm::dot(pLight->getDirection(firePos), pLight->getDirection(firePos)));
-            if(lightT < point.getT()){
+            double lightT = glm::sqrt(glm::dot(pLight->getRelativeDirection(firePos), pLight->getRelativeDirection(firePos)));
+            if(lightT <= point.getT()){
                 collided = true;
             }
         }

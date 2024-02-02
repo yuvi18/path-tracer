@@ -18,6 +18,7 @@ public:
   virtual double distanceAttenuation(const glm::dvec3 &P) const = 0;
   virtual glm::dvec3 getColor() const = 0;
   virtual glm::dvec3 getDirection(const glm::dvec3 &P) const = 0;
+  virtual glm::dvec3 getRelativeDirection(const glm::dvec3 &P) const = 0;
   bool isPoint(){
       return pointLight;
   }
@@ -46,6 +47,7 @@ public:
   virtual double distanceAttenuation(const glm::dvec3 &P) const;
   virtual glm::dvec3 getColor() const;
   virtual glm::dvec3 getDirection(const glm::dvec3 &P) const;
+  virtual glm::dvec3 getRelativeDirection(const glm::dvec3 &P) const;
 
 protected:
   glm::dvec3 orientation;
@@ -72,6 +74,7 @@ public:
   virtual double distanceAttenuation(const glm::dvec3 &P) const;
   virtual glm::dvec3 getColor() const;
   virtual glm::dvec3 getDirection(const glm::dvec3 &P) const;
+  virtual glm::dvec3 getRelativeDirection(const glm::dvec3 &P) const;
 
   void setAttenuationConstants(float a, float b, float c) {
     constantTerm = a;

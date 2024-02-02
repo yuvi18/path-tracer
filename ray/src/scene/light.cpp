@@ -22,7 +22,11 @@ glm::dvec3 DirectionalLight::shadowAttenuation(const ray &r,
 glm::dvec3 DirectionalLight::getColor() const { return color; }
 
 glm::dvec3 DirectionalLight::getDirection(const glm::dvec3 &) const {
-  return -orientation;
+    return -orientation;
+}
+
+glm::dvec3 DirectionalLight::getRelativeDirection(const glm::dvec3 &P) const {
+    return -orientation;
 }
 
 double PointLight::distanceAttenuation(const glm::dvec3 &P) const {
@@ -38,6 +42,10 @@ glm::dvec3 PointLight::getColor() const { return color; }
 
 glm::dvec3 PointLight::getDirection(const glm::dvec3 &P) const {
   return glm::normalize(position - P);
+}
+
+glm::dvec3 PointLight::getRelativeDirection(const glm::dvec3 &P) const {
+    return position - P;
 }
 
 glm::dvec3 PointLight::shadowAttenuation(const ray &r,
