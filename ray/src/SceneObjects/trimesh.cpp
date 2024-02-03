@@ -136,7 +136,6 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     glm::dvec2 bVec(bTerm1, bTerm2);
     glm::dvec2 partialBary = glm::inverse(AMat) * bVec;
     glm::dvec3 fullBary(partialBary[0], partialBary[1], 1 - partialBary[0] - partialBary[1]);
-    cout << fullBary << endl;
 
     //If not in triangle
     if(!(fullBary[0] >= 0 && fullBary[0] <= 1 && fullBary[1] >= 0 && fullBary[1] <= 1 && fullBary[2] >= 0 && fullBary[2] <= 1)){
