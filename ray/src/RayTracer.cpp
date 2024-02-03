@@ -309,6 +309,7 @@ void RayTracer::traceImage(int w, int h)
 			tracePixel(i, j);
 		}
 	}
+    tracePixel(300, 200);
 }
 
 int RayTracer::aaImage()

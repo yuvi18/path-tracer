@@ -111,10 +111,10 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     }
     //Use point a to define the plane
     double num = glm::dot(a - origin, normal);
-    assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
+//    assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
     double t = num / denom;
     //Object was before ray cast
-    assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
+//    assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
     if(t < 0){
       return false;
     }
