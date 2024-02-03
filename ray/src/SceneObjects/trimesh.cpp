@@ -81,53 +81,55 @@ bool TrimeshFace::intersect(ray &r, isect &i) const {
 // and put the parameter in t and the barycentric coordinates of the
 // intersection in u (alpha) and v (beta).
 bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
-  // YOUR CODE HERE
-  //
-  // FIXME: Add ray-trimesh intersection
+    // YOUR CODE HERE
+    //
+    // FIXME: Add ray-trimesh intersection
 
-  /* To determine the color of an intersection, use the following rules:
+    /* To determine the color of an intersection, use the following rules:
      - If the parent mesh has non-empty `uvCoords`, barycentrically interpolate
        the UV coordinates of the three vertices of the face, then assign it to
        the intersection using i.setUVCoordinates().
      - Otherwise, if the parent mesh has non-empty `vertexColors`,
        barycentrically interpolate the colors from the three vertices of the
        face. Create a new material by copying the parent's material, set the
-       diffuse color of this material to the interpolated color, and then 
+       diffuse color of this material to the interpolated color, and then
        assign this material to the intersection.
      - If neither is true, assign the parent's material to the intersection.
-  */
+    */
 
-  //Get Triangle Coords
-  Trimesh* parent = this->getParent();
-  glm::dvec3 a = parent->vertices[this->ids[0]];
-  glm::dvec3 b = parent->vertices[this->ids[1]];
-  glm::dvec3 c = parent->vertices[this->ids[2]];
-  //Check to see if it intersects the plane
-  glm::dvec3 origin = r.getPosition();
-  glm::dvec3 direction = r.getDirection();
-  glm::dvec3 normal = getNormal();
-//  double denom = glm::dot(normal, direction);
-//  //Parallel to plane.
-//  if(denom < RAY_EPSILON){
-//      return false;
-//  }
-//  //Use point a to define the plane
-//
-//  double num = glm::dot(a - origin, normal);
-//  assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
-//  double t = num / denom;
-//  //Object was before ray cast
-////    T val: 5.3062
-////    T val: 5.3444
-////    T val: 5.34217
-////    T val: 5.19171
-////    T val: 3.83527
-//  assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
-//  if(t < RAY_EPSILON){
-//      return false;
-//  }
-//
-//  glm::dvec3 intersectPoint = r.at(t);
+    //Get Triangle Coords + Vectors
+    Trimesh* parent = this->getParent();
+    glm::dvec3 a = parent->vertices[this->ids[0]];
+    glm::dvec3 b = parent->vertices[this->ids[1]];
+    glm::dvec3 c = parent->vertices[this->ids[2]];
+    glm::dvec3 origin = r.getPosition();
+    glm::dvec3 direction = r.getDirection();
+    glm::dvec3 normal = getNormal();
+
+    //Check to see if it intersects the plane
+    double denom = glm::dot(normal, direction);
+    //Parallel to plane.
+    if(denom < RAY_EPSILON){
+        return false;
+    }
+    //Use point a to define the plane
+    double num = glm::dot(a - origin, normal);
+    assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
+    double t = num / denom;
+    //Object was before ray cast
+    assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
+    if(t < RAY_EPSILON){
+      return false;
+    }
+
+    glm::dvec3 intersectPoint = r.at(t);
+
+    //Barycentric coordinates
+    glm::dvec3 pDiff2 = b - a;
+    glm::dvec3 pDiff3 = c - a;
+    glm::mat2 A(pDiff2, pDiff3);
+
+
 //  //Check if point is in triangle
 //  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
 //  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
@@ -140,6 +142,7 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 //  i.setMaterial(parent->material);
 //  i.setN(normal);
 //  return true;
+return false;
 }
 
 // Once all the verts and faces are loaded, per vertex normals can be
