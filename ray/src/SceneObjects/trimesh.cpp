@@ -83,10 +83,6 @@ bool TrimeshFace::intersect(ray &r, isect &i) const {
 // and put the parameter in t and the barycentric coordinates of the
 // intersection in u (alpha) and v (beta).
 bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
-    // YOUR CODE HERE
-    //
-    // FIXME: Add ray-trimesh intersection
-
     /* To determine the color of an intersection, use the following rules:
      - If the parent mesh has non-empty `uvCoords`, barycentrically interpolate
        the UV coordinates of the three vertices of the face, then assign it to
@@ -142,10 +138,28 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
         return false;
     }
 
+    //If contains vertex norms
+    if(!this->parent->normals.empty()){
+        normalA = parent->normals[this->ids[0]] * fullBary[0];
+        normalB = parent->normals[this->ids[1]] * fullBary[1];
+        normalC = parent->normals[this->ids[2]] * fullBary[2];
+        glm::dvec3 interpolatedNormal = normalA + normalB + normalC;
+        i.setN(interpolatedNormal);
+    }
+    else{
+        i.setN(normal);
+    }
+
+    //If Vertex Colors
+    if(!this->parent->vertColors.empty()){
+
+    }
+
+    //No Vertex Colors
+
     i.setT(t);
     i.setObject(this->parent);
     i.setMaterial(parent->material);
-    i.setN(normal);
     return true;
 }
 
