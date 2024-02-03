@@ -307,6 +307,7 @@ void RayTracer::traceImage(int w, int h)
 		for (int j = 0; j < h; j++)
 		{
 			tracePixel(i, j);
+			cout << "Pixel Traced " << i << " " << j << endl;
 		}
 	}
 }

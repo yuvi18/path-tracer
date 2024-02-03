@@ -158,7 +158,10 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
         colorB = parent->vertColors[this->ids[1]] * fullBary[1];
         colorC = parent->vertColors[this->ids[2]] * fullBary[2];
         glm::dvec3 interpolatedColor = colorA + colorB + colorC;
-
+        //Material is an object, so a deep copy should work... hopefully. If there are bugs cehck this statement.
+        Material newMaterial = parent->material;
+        newMaterial.setDiffuse(interpolatedColor);
+        i.setMaterial(newMaterial);
     }
     else{
         i.setMaterial(parent->material);
