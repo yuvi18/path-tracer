@@ -84,10 +84,10 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 #if VERBOSE
 	std::cerr << "== current depth: " << depth << std::endl;
 #endif
-	if (depth < 0)
-		return glm::dvec3(0, 0, 0);
+//	if (depth < 0)
+//		return glm::dvec3(0, 0, 0);
 	// Added condition: Depth must be >= 0.
-	if (&&scene->intersect(r, i))
+	if (depth >= 0 && scene->intersect(r, i))
 	{
 		// An intersection occurred!  We've got work to do. For now, this code gets
 		// the material for the surface that was intersected, and asks that material
@@ -100,21 +100,21 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		// MY CODE HERE:
 		const Material &m = i.getMaterial(); // 1. get the material.
 		colorC = m.shade(scene.get(), r, i);
-		glm::dvec3 normal = i.getN();
-		// Inside the mesh if the ray is facing the opposite direction as the
-		// normal of the mesh.
-		bool insideMesh = glm::dot(1, normal) < 0;
-		// Reflect if the matrial is reflective.
-		bool reflective = m.Refl();
-		if (reflective)
-		{
-			glm::dvec3 reflectRayDir = glm::dot(1, n) * 2 * n - 1;
-			glm::dvec3 reflectRayPos = r.at(i) + n;
-			ray reflectRay = ray(reflectRayPos, reflectRayDir, glm::dvec3(1, 1, 1), ray::REFLECTION);
-			colorC += traceRay(reflectRay, thresh, depth - 1, 0);
-		}
-		// Refract if the material is transparent.
-		bool refractive = m.Trans();
+//		glm::dvec3 normal = i.getN();
+//		// Inside the mesh if the ray is facing the opposite direction as the
+//		// normal of the mesh.
+//		bool insideMesh = glm::dot(1, normal) < 0;
+//		// Reflect if the matrial is reflective.
+//		bool reflective = m.Refl();
+//		if (reflective)
+//		{
+//			glm::dvec3 reflectRayDir = glm::dot(1, n) * 2 * n - 1;
+//			glm::dvec3 reflectRayPos = r.at(i) + n;
+//			ray reflectRay = ray(reflectRayPos, reflectRayDir, glm::dvec3(1, 1, 1), ray::REFLECTION);
+//			colorC += traceRay(reflectRay, thresh, depth - 1, 0);
+//		}
+//		// Refract if the material is transparent.
+//		bool refractive = m.Trans();
 	}
 	else
 	{
