@@ -24,7 +24,6 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   // somewhere in your code in order to compute shadows and light falloff.
   //	if( debugMode )
   //		std::cout << "Debugging Phong code..." << std::endl;
-  cout << "Shading at " << i.getT() << endl;
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
@@ -79,7 +78,6 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   finalShade += diffuseTerm;
   finalShade += specularTerm;
   finalShade += ke(i);
-  cout << diffuseTerm << endl;
   return finalShade;
 }
 

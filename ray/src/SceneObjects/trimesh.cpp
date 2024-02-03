@@ -96,7 +96,6 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
        assign this material to the intersection.
      - If neither is true, assign the parent's material to the intersection.
     */
-
     //Get Triangle Coords + Vectors
     Trimesh* parent = this->getParent();
     glm::dvec3 a = parent->vertices[this->ids[0]];
