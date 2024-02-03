@@ -144,6 +144,8 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
         normalB = parent->normals[this->ids[1]] * fullBary[1];
         normalC = parent->normals[this->ids[2]] * fullBary[2];
         glm::dvec3 interpolatedNormal = normalA + normalB + normalC;
+        //Don't forget to normalize
+        interpolatedNormal = glm::normalize(interpolatedNormal);
         i.setN(interpolatedNormal);
     }
     else{
@@ -152,14 +154,18 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 
     //If Vertex Colors
     if(!this->parent->vertColors.empty()){
+        colorA = parent->vertColors[this->ids[0]] * fullBary[0];
+        colorB = parent->vertColors[this->ids[1]] * fullBary[1];
+        colorC = parent->vertColors[this->ids[2]] * fullBary[2];
+        glm::dvec3 interpolatedColor = colorA + colorB + colorC;
 
     }
-
-    //No Vertex Colors
+    else{
+        i.setMaterial(parent->material);
+    }
 
     i.setT(t);
     i.setObject(this->parent);
-    i.setMaterial(parent->material);
     return true;
 }
 
