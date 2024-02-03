@@ -140,9 +140,9 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 
     //If contains vertex norms
     if(!this->parent->normals.empty()){
-        normalA = parent->normals[this->ids[0]] * fullBary[0];
-        normalB = parent->normals[this->ids[1]] * fullBary[1];
-        normalC = parent->normals[this->ids[2]] * fullBary[2];
+        glm::dvec3 normalA = parent->normals[this->ids[0]] * fullBary[0];
+        glm::dvec3 normalB = parent->normals[this->ids[1]] * fullBary[1];
+        glm::dvec3 normalC = parent->normals[this->ids[2]] * fullBary[2];
         glm::dvec3 interpolatedNormal = normalA + normalB + normalC;
         //Don't forget to normalize
         interpolatedNormal = glm::normalize(interpolatedNormal);
@@ -154,9 +154,9 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 
     //If Vertex Colors
     if(!this->parent->vertColors.empty()){
-        colorA = parent->vertColors[this->ids[0]] * fullBary[0];
-        colorB = parent->vertColors[this->ids[1]] * fullBary[1];
-        colorC = parent->vertColors[this->ids[2]] * fullBary[2];
+        glm::dvec3 colorA = parent->vertColors[this->ids[0]] * fullBary[0];
+        glm::dvec3 colorB = parent->vertColors[this->ids[1]] * fullBary[1];
+        glm::dvec3 colorC = parent->vertColors[this->ids[2]] * fullBary[2];
         glm::dvec3 interpolatedColor = colorA + colorB + colorC;
         //Material is an object, so a deep copy should work... hopefully. If there are bugs cehck this statement.
         Material newMaterial = parent->material;
