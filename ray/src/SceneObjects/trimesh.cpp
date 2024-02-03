@@ -136,6 +136,10 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     glm::dvec2 partialBary = glm::inverse(AMat) * bVec;
     glm::dvec3 fullBary(partialBary[0], partialBary[1], 1 - partialBary[0] - partialBary[1]);
 
+    //If not in triangle
+    if(!(fullBary[0] >= 0 && fullBary[0] <= 1 && fullBary[1] >= 0 && fullBary[1] <= 1 && fullBary[2] >= 0 && fullBary[2] <= 1)){
+        return false;
+    }
     //Check if point is in triangle
 //  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
 //  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
@@ -143,12 +147,12 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 //  if(check1 < 0  || check2 < 0 || check3 < 0){
 //      return false;
 //  }
-//  i.setT(t);
-//  i.setObject(this->parent);
-//  i.setMaterial(parent->material);
-//  i.setN(normal);
-//  return true;
-return false;
+    cout << "Collided" << endl;
+    i.setT(t);
+    i.setObject(this->parent);
+    i.setMaterial(parent->material);
+    i.setN(normal);
+    return true;
 }
 
 // Once all the verts and faces are loaded, per vertex normals can be
