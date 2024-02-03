@@ -302,14 +302,13 @@ void RayTracer::traceImage(int w, int h)
 	//
 	//       An asynchronous traceImage lets the GUI update your results
 	//       while rendering.
-//	for (int i = 0; i < w; i++)
-//	{
-//		for (int j = 0; j < h; j++)
-//		{
-//			tracePixel(i, j);
-//		}
-//	}
-tracePixel(350, 400);
+	for (int i = 0; i < w; i++)
+	{
+		for (int j = 0; j < h; j++)
+		{
+			tracePixel(i, j);
+		}
+	}
 }
 
 int RayTracer::aaImage()

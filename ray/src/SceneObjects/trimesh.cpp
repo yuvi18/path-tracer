@@ -6,6 +6,8 @@
 #include <string.h>
 #include <iostream>
 #include "../ui/TraceUI.h"
+#include <glm/gtx/io.hpp>
+
 extern TraceUI *traceUI;
 extern TraceUI *traceUI;
 
@@ -108,7 +110,7 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     //Check to see if it intersects the plane
     double denom = glm::dot(normal, direction);
     //Parallel to plane.
-    if(denom < RAY_EPSILON){
+    if(glm::abs(denom) < RAY_EPSILON){
         return false;
     }
     //Use point a to define the plane
@@ -117,7 +119,7 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     double t = num / denom;
     //Object was before ray cast
     assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
-    if(t < RAY_EPSILON){
+    if(t < 0){
       return false;
     }
 
@@ -134,20 +136,13 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     glm::dvec2 bVec(bTerm1, bTerm2);
     glm::dvec2 partialBary = glm::inverse(AMat) * bVec;
     glm::dvec3 fullBary(partialBary[0], partialBary[1], 1 - partialBary[0] - partialBary[1]);
+    cout << fullBary << endl;
 
     //If not in triangle
     if(!(fullBary[0] >= 0 && fullBary[0] <= 1 && fullBary[1] >= 0 && fullBary[1] <= 1 && fullBary[2] >= 0 && fullBary[2] <= 1)){
         return false;
     }
-    //Check if point is in triangle
-//  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
-//  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
-//  double check3 = glm::dot(glm::cross(a - c, intersectPoint - c), normal);
-//  if(check1 < 0  || check2 < 0 || check3 < 0){
-//      return false;
-//  }
-    cout << "Collided" << endl;
-    cout << t << endl;
+
     i.setT(t);
     i.setObject(this->parent);
     i.setMaterial(parent->material);
