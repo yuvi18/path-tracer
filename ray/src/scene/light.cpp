@@ -32,7 +32,7 @@ glm::dvec3 DirectionalLight::getRelativeDirection(const glm::dvec3 &P) const {
 double PointLight::distanceAttenuation(const glm::dvec3 &P) const {
   double distance = glm::distance(position, P);
   double denom = constantTerm + linearTerm * distance + quadraticTerm * glm::pow(distance, 2);
-  return 1 / denom;
+  return glm::min(1.0, 1 / denom);
 }
 
 glm::dvec3 PointLight::getColor() const { return color; }
