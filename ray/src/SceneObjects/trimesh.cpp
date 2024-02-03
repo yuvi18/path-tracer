@@ -148,6 +148,7 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
 //      return false;
 //  }
     cout << "Collided" << endl;
+    cout << t << endl;
     i.setT(t);
     i.setObject(this->parent);
     i.setMaterial(parent->material);
