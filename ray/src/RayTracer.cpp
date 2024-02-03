@@ -29,11 +29,11 @@ extern TraceUI *traceUI;
 // set in the "trace single ray" mode in TraceGLWindow, for example.
 bool debugMode = true;
 
+// Done?
 // Trace a top-level ray through pixel(i,j), i.e. normalized window coordinates
 // (x,y), through the projection plane, and out into the scene. All we do is
 // enter the main ray-tracing method, getting things started by plugging in an
 // initial ray weight of (0.0,0.0,0.0) and an initial recursion depth of 0.
-
 glm::dvec3 RayTracer::trace(double x, double y)
 {
 	// Clear out the ray cache in the scene for debugging purposes,
@@ -52,6 +52,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	return ret;
 }
 
+// Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
 	glm::dvec3 col(0, 0, 0);
@@ -83,28 +84,37 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 #if VERBOSE
 	std::cerr << "== current depth: " << depth << std::endl;
 #endif
-
+	if (depth < 0)
+		return glm::dvec3(0, 0, 0);
 	// Added condition: Depth must be >= 0.
-	if (depth >= 0 && scene->intersect(r, i))
+	if (&&scene->intersect(r, i))
 	{
-		// YOUR CODE HERE
-
 		// An intersection occurred!  We've got work to do. For now, this code gets
 		// the material for the surface that was intersected, and asks that material
 		// to provide a color for the ray.
-
-		// MY CODE HERE:
-		const Material &m = i.getMaterial(); // 1. get the material.
-		colorC = m.shade(scene.get(), r, i);
-
-		// const shininess = m.shininess;
 
 		// This is a great place to insert code for recursive ray tracing. Instead
 		// of just returning the result of shade(), add some more steps: add in the
 		// contributions from reflected and refracted rays.
 
-		// const Material &m = i.getMaterial();
-		// colorC = m.shade(scene.get(), r, i);
+		// MY CODE HERE:
+		const Material &m = i.getMaterial(); // 1. get the material.
+		colorC = m.shade(scene.get(), r, i);
+		glm::dvec3 normal = i.getN();
+		// Inside the mesh if the ray is facing the opposite direction as the
+		// normal of the mesh.
+		bool insideMesh = glm::dot(1, normal) < 0;
+		// Reflect if the matrial is reflective.
+		bool reflective = m.Refl();
+		if (reflective)
+		{
+			glm::dvec3 reflectRayDir = glm::dot(1, n) * 2 * n - 1;
+			glm::dvec3 reflectRayPos = r.at(i) + n;
+			ray reflectRay = ray(reflectRayPos, reflectRayDir, glm::dvec3(1, 1, 1), ray::REFLECTION);
+			colorC += traceRay(reflectRay, thresh, depth - 1, 0);
+		}
+		// Refract if the material is transparent.
+		bool refractive = m.Trans();
 	}
 	else
 	{
@@ -151,11 +161,13 @@ void RayTracer::getBuffer(unsigned char *&buf, int &w, int &h)
 	h = buffer_height;
 }
 
+// Done.
 double RayTracer::aspectRatio()
 {
 	return sceneLoaded() ? scene->getCamera().getAspectRatio() : 1;
 }
 
+// Done.
 bool RayTracer::loadScene(const char *fn)
 {
 	ifstream ifs(fn);
@@ -330,6 +342,7 @@ void RayTracer::waitRender()
 	// TIPS: Join all worker threads here.
 }
 
+// Done.
 glm::dvec3 RayTracer::getPixel(int i, int j)
 {
 	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
@@ -337,6 +350,7 @@ glm::dvec3 RayTracer::getPixel(int i, int j)
 					  (double)pixel[2] / 255.0);
 }
 
+// Done.
 void RayTracer::setPixel(int i, int j, glm::dvec3 color)
 {
 	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
