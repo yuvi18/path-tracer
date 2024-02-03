@@ -125,12 +125,18 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     glm::dvec3 intersectPoint = r.at(t);
 
     //Barycentric coordinates
-    glm::dvec3 pDiff2 = b - a;
-    glm::dvec3 pDiff3 = c - a;
-    glm::mat2 A(pDiff2, pDiff3);
+    double aTerm1 = glm::dot(b - a, b - a);
+    double aTerm2 = glm::dot(b - a, c - a);
+    double aTerm3 = glm::dot(c - a, b - a);
+    double aTerm4 = glm::dot(c - a, c - a);
+    glm::dmat2 AMat(aTerm1, aTerm2, aTerm3, aTerm4);
+    double bTerm1 = glm::dot(intersectPoint - a, b - a);
+    double bTerm2 = glm::dot(intersectPoint - a, c - a);
+    glm::dvec2 bVec(bTerm1, bTerm2);
+    glm::dvec2 partialBary = glm::inverse(AMat) * bVec;
+    glm::dvec3 fullBary(partialBary[0], partialBary[1], 1 - partialBary[0] - partialBary[1]);
 
-
-//  //Check if point is in triangle
+    //Check if point is in triangle
 //  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
 //  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
 //  double check3 = glm::dot(glm::cross(a - c, intersectPoint - c), normal);
