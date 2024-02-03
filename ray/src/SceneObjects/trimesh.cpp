@@ -106,40 +106,40 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
   glm::dvec3 origin = r.getPosition();
   glm::dvec3 direction = r.getDirection();
   glm::dvec3 normal = getNormal();
-  double denom = glm::dot(normal, direction);
-  //Parallel to plane.
-  if(denom < RAY_EPSILON){
-      return false;
-  }
-  //Use point a to define the plane
-
-  double num = glm::dot(a - origin, normal);
-  assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
-  double t = num / denom;
-  //Object was before ray cast
-//    T val: 5.3062
-//    T val: 5.3444
-//    T val: 5.34217
-//    T val: 5.19171
-//    T val: 3.83527
-  assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
-  if(t < RAY_EPSILON){
-      return false;
-  }
-
-  glm::dvec3 intersectPoint = r.at(t);
-  //Check if point is in triangle
-  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
-  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
-  double check3 = glm::dot(glm::cross(a - c, intersectPoint - c), normal);
-  if(check1 < 0  || check2 < 0 || check3 < 0){
-      return false;
-  }
-  i.setT(t);
-  i.setObject(this->parent);
-  i.setMaterial(parent->material);
-  i.setN(normal);
-  return true;
+//  double denom = glm::dot(normal, direction);
+//  //Parallel to plane.
+//  if(denom < RAY_EPSILON){
+//      return false;
+//  }
+//  //Use point a to define the plane
+//
+//  double num = glm::dot(a - origin, normal);
+//  assert(glm::abs(glm::dot(normal, a - origin) - glm::dot(normal, b - origin)) < RAY_EPSILON);
+//  double t = num / denom;
+//  //Object was before ray cast
+////    T val: 5.3062
+////    T val: 5.3444
+////    T val: 5.34217
+////    T val: 5.19171
+////    T val: 3.83527
+//  assert(glm::dot((origin + direction  * t - a), normal) < RAY_EPSILON);
+//  if(t < RAY_EPSILON){
+//      return false;
+//  }
+//
+//  glm::dvec3 intersectPoint = r.at(t);
+//  //Check if point is in triangle
+//  double check1 = glm::dot(glm::cross(b - a, intersectPoint - a), normal);
+//  double check2 = glm::dot(glm::cross(c - b, intersectPoint - b), normal);
+//  double check3 = glm::dot(glm::cross(a - c, intersectPoint - c), normal);
+//  if(check1 < 0  || check2 < 0 || check3 < 0){
+//      return false;
+//  }
+//  i.setT(t);
+//  i.setObject(this->parent);
+//  i.setMaterial(parent->material);
+//  i.setN(normal);
+//  return true;
 }
 
 // Once all the verts and faces are loaded, per vertex normals can be
