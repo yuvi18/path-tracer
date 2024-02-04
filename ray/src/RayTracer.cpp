@@ -93,17 +93,18 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		const Material &m = i.getMaterial(); // 1. get the material.
 		colorC = m.shade(scene.get(), r, i);
 		glm::dvec3 normal = i.getN();
-		bool insideMesh = glm::dot(-r.getDirection(), normal) <= 0;
-        cout << insideMesh << endl;
-		//Reflect
-		if (!insideMesh && m.Refl())
-		{
+		// I don't think we use inside mesh at all. I'll keep it in for now but we should delete it if it's useless.
+		// bool insideMesh = glm::dot(-r.getDirection(), normal) <= 0;
+		// Reflect
+		if (m.Refl()){
 			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), normal) * normal + r.getDirection();
 			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
-			double x = 0.0; // Needs an explicit var.
-			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, x);
+			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t);
 			colorC += reflResult;
+		}
+		if(m.Trans()){
+
 		}
 	}
 	else
