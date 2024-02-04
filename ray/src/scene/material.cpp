@@ -16,7 +16,6 @@ Material::~Material() {}
 // Apply the phong model to this point on the surface of the object, returning
 // the color of that point.
 glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
-
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
   //Always add ambient light.
