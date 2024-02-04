@@ -79,6 +79,7 @@ glm::dvec3 PointLight::shadowAttenuation(const ray &r,
         //Great, now get the next material's intersection and continue.
         shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
         scene->intersect(shadowRay, point);
+        lightT = glm::sqrt(glm::dot(position - shadowRay.getPosition(), position - shadowRay.getPosition()));
     }
     return light;
 }
