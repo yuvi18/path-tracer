@@ -125,6 +125,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
                 glm::dvec3 refractDir = glm::refract(r.getDirection(), normal, indexRatioEntry);
                 refractRay = ray(r.at(i.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             }
+            cout << refractRay.getDirection() << endl;
             //Get exit point
             isect exitPoint;
             scene->intersect(refractRay, exitPoint);
@@ -139,17 +140,17 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
             //Cases of Refraction
             if(sinSquaredInternal2 < RAY_EPSILON && newM.index(exitPoint) == 1){
                 //No Deflection
-                exitRay = ray(refractRay.at(i.getT() + RAY_EPSILON), refractRay.getDirection(), glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
+                exitRay = ray(refractRay.at(exitPoint.getT() + RAY_EPSILON), refractRay.getDirection(), glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             }
             else if(sinSquaredExit >= 1){
                 //Perfect Reflection
                 glm::dvec3 reflectDir = glm::reflect(refractRay.getDirection(), newNormal);
-                exitRay = ray(refractRay.at(i.getT() + RAY_EPSILON), reflectDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
+                exitRay = ray(refractRay.at(exitPoint.getT() + RAY_EPSILON), reflectDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             }
             else{
                 //Normal Refraction
                 glm::dvec3 refractDir = glm::refract(refractRay.getDirection(), newNormal, indexRatioExit);
-                exitRay = ray(refractRay.at(i.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
+                exitRay = ray(refractRay.at(exitPoint.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             }
             glm::dvec3 refractResult = m.kt(i) * traceRay(exitRay, thresh, depth - 1, t);
             colorC += refractResult;
