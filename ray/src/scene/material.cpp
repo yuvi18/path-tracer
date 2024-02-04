@@ -27,7 +27,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
       glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
       glm::dvec3 fireDirection = pLight->getDirection(firePos);
       glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
-      ray shadowRay(firePos, fireDirection, fireWeight);
+      ray shadowRay(firePos, fireDirection, fireWeight, ray::SHADOW);
 
       //Diffusion Term
       glm::dvec3 contributionD = pLight->shadowAttenuation(shadowRay, firePos);
