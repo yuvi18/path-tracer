@@ -130,8 +130,11 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
             isect exitPoint;
             scene->intersect(refractRay, exitPoint);
             glm::dvec3 exitPos = refractRay.at(exitPoint);
+            double d = glm::distance(entryPos, exitPos);
             glm::dvec3 newNormal = -exitPoint.getN();
             const Material &newM = exitPoint.getMaterial();
+            //Add color from the exit
+            colorC += newM.shade(scene.get(), refractRay, exitPoint) * glm::pow(m.kt(i), glm::dvec3(d));
             //Now do what we did above again
             double indexRatioExit =  m.index(i) / 1;
             double cosExit = glm::dot(newNormal, refractRay.getDirection());
@@ -153,7 +156,6 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
                 glm::dvec3 refractDir = glm::refract(refractRay.getDirection(), newNormal, indexRatioExit);
                 exitRay = ray(refractRay.at(exitPoint.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             }
-            double d = glm::distance(entryPos, exitPos);
             glm::dvec3 refractResult = glm::pow(m.kt(i), glm::dvec3(d)) * traceRay(exitRay, thresh, depth - 1, t);
             colorC += refractResult;
 		}
