@@ -92,10 +92,16 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		const Material &m = i.getMaterial(); // 1. get the material.
 		colorC = m.shade(scene.get(), r, i);
 		glm::dvec3 normal = i.getN();
-		// I don't think we use inside mesh at all. I'll keep it in for now but we should delete it if it's useless.
-		// bool insideMesh = glm::dot(-r.getDirection(), normal) <= 0;
+		bool insideMesh = glm::dot(-r.getDirection(), normal) <= 0;
+		double d = 0;
+		if(insideMesh){
+		    //Came out of transculenct material
+		    glm::dvec3 startPos = r.getPosition();
+		    glm::dvec3 endPos = r.at(i);
+		    d = glm::distance(startPos, endPos);
+		}
 		// Reflect
-		if (m.Refl()){
+		if (!insideMesh && m.Refl()){
 			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), normal) * normal + r.getDirection();
 			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
@@ -103,33 +109,25 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 			colorC += reflResult;
 		}
 		if(m.Trans()){
-		    glm::dvec3 entryPos = r.at(i);
 		    //Normal Refraction
-		    glm::dvec3 refractDir = glm::refract(r.getDirection(), normal, 1 / m.index(i));
+		    double ratio = 1 / m.index(i);
+		    glm::dvec3 refractNorm = normal;
+		    if(insideMesh){
+                ratio = m.index(i);
+                refractNorm = -normal;
+		    }
+            glm::dvec3 refractDir = glm::refract(r.getDirection(), refractNorm, ratio);
 		    if(refractDir == glm::dvec3(0)){
-		        refractDir = glm::reflect(r.getDirection(), normal);
+		        refractDir = glm::reflect(r.getDirection(), refractNorm);
 		    }
 		    ray refractRay = ray(r.at(i.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
-            //Get exit point
-            isect exitPoint;
-            scene->intersect(refractRay, exitPoint);
-            if(exitPoint.getT() != 1000) {
-                glm::dvec3 exitPos = refractRay.at(exitPoint);
-                double d = glm::distance(entryPos, exitPos);
-                glm::dvec3 newNormal = -exitPoint.getN();
-                const Material &newM = exitPoint.getMaterial();
-                //Add color from the exit
-                colorC += newM.shade(scene.get(), refractRay, exitPoint) * glm::pow(m.kt(i), glm::dvec3(d));
-                refractDir = glm::refract(refractRay.getDirection(), newNormal, m.index(i));
-                ray exitRay = ray(refractRay.at(exitPoint.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0),
-                                  ray::REFRACTION);
-                if (refractDir == glm::dvec3(0)) {
-                    refractDir = glm::reflect(refractRay.getDirection(), normal);
-                }
-                glm::dvec3 refractResult = glm::pow(m.kt(i), glm::dvec3(d)) * traceRay(exitRay, thresh, depth - 1, t);
-                colorC += refractResult;
-            }
+            glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t);
+            colorC += refractResult;
 		}
+        if(insideMesh){
+            //Exiting, so attenuiate by the distance
+            colorC *= glm::pow(m.kt(i), glm::dvec3(d));
+        }
 	}
 	else
 	{
