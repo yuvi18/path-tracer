@@ -31,47 +31,26 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   glm::dvec3 diffuseTerm(0, 0, 0);
   glm::dvec3 specularTerm(0, 0, 0);
   for ( const auto& pLight : scene->getAllLights() ){
-        bool collided = false;
-        if(pLight->isPoint()){
-            //Shoot a ray to the point's light direction
-            glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
-            glm::dvec3 fireDirection = pLight->getDirection(firePos);
-            glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
-            ray shadowRay(firePos, fireDirection, fireWeight);
-            isect point;
-            scene->intersect(shadowRay, point);
-            double lightT = glm::sqrt(glm::dot(pLight->getRelativeDirection(firePos), pLight->getRelativeDirection(firePos)));
-            if(lightT <= point.getT()){
-                collided = true;
-            }
-        }
-        else{
-            //Shoot a ray to the directional's light direction
-            glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
-            glm::dvec3 fireDirection = pLight->getDirection(firePos);
-            glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
-            ray shadowRay(firePos, fireDirection, fireWeight);
-            isect point;
-            scene->intersect(shadowRay, point);
-            if(point.getT() == 1000){
-                collided = true;
-            }
-        }
-        if(collided){
-            //Diffusion Term
-            glm::dvec3 contributionD = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
-            contributionD *= kd(i);
-            contributionD *= glm::abs(glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
-            diffuseTerm += contributionD;
+      glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
+      glm::dvec3 fireDirection = pLight->getDirection(firePos);
+      glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
+      ray shadowRay(firePos, fireDirection, fireWeight);
 
-            //Specular Term
-            glm::dvec3 contributionS = pLight->getColor() * pLight->distanceAttenuation(pointOfImpact);
-            contributionS *= ks(i);
-            glm::dvec3 v = -1.0 * r.getDirection();
-            glm::dvec3 r = glm::reflect(-1.0 * pLight->getDirection(pointOfImpact), i.getN());
-            contributionS *= glm::pow(glm::max(0.0, glm::dot(v, r)), shininess(i));
-            specularTerm += contributionS;
-        }
+      //Diffusion Term
+      glm::dvec3 contributionD = pLight->shadowAttenuation(shadowRay, firePos);
+      contributionD *= pLight->distanceAttenuation(pointOfImpact);
+      contributionD *= kd(i);
+      contributionD *= glm::abs(glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
+      diffuseTerm += contributionD;
+
+      //Specular Term
+      glm::dvec3 contributionS = pLight->shadowAttenuation(shadowRay, firePos);
+      contributionS *= pLight->distanceAttenuation(pointOfImpact);
+      contributionS *= ks(i);
+      glm::dvec3 v = -1.0 * r.getDirection();
+      glm::dvec3 r = glm::reflect(-1.0 * pLight->getDirection(pointOfImpact), i.getN());
+      contributionS *= glm::pow(glm::max(0.0, glm::dot(v, r)), shininess(i));
+      specularTerm += contributionS;
   }
 
   finalShade += ambientTerm;

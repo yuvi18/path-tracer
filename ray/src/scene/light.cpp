@@ -16,7 +16,14 @@ glm::dvec3 DirectionalLight::shadowAttenuation(const ray &r,
                                                const glm::dvec3 &p) const {
   // YOUR CODE HERE:
   // You should implement shadow-handling code here.
-  return glm::dvec3(1.0, 1.0, 1.0);
+    glm::dvec3 light = getColor();
+    isect point;
+    ray shadowRay = r;
+    this->scene->intersect(shadowRay, point);
+    if(point.getT() < 1000){
+        light *= point.getMaterial().kt(point);
+    }
+    return light;
 }
 
 glm::dvec3 DirectionalLight::getColor() const { return color; }
@@ -47,9 +54,15 @@ glm::dvec3 PointLight::getRelativeDirection(const glm::dvec3 &P) const {
 
 glm::dvec3 PointLight::shadowAttenuation(const ray &r,
                                          const glm::dvec3 &p) const {
-  // YOUR CODE HERE:
-  // You should implement shadow-handling code here.
-  return glm::dvec3(1, 1, 1);
+    glm::dvec3 light = getColor();
+    isect point;
+    ray shadowRay = r;
+    scene->intersect(shadowRay, point);
+    double lightT = glm::sqrt(glm::dot(position - p, position - p));
+    if(point.getT() < lightT){
+        light *= point.getMaterial().kt(point);
+    }
+    return light;
 }
 
 #define VERBOSE 0
