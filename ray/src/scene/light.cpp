@@ -13,15 +13,25 @@ double DirectionalLight::distanceAttenuation(const glm::dvec3 &) const {
 }
 
 glm::dvec3 DirectionalLight::shadowAttenuation(const ray &r,
-                                               const glm::dvec3 &p) const {
-  // YOUR CODE HERE:
-  // You should implement shadow-handling code here.
+                                               const glm::dvec3 &p) const
     glm::dvec3 light = getColor();
+    double lightT = glm::sqrt(glm::dot(position - p, position - p));
     isect point;
     ray shadowRay = r;
-    this->scene->intersect(shadowRay, point);
-    if(point.getT() < 1000){
-        light *= point.getMaterial().kt(point);
+    scene->intersect(shadowRay, point);
+    while(point.getT() < 1000){
+        cout << point.getT() << endl;
+        //We intersected a material before the light. Now we need to get the other side to find the distance.
+        glm::dvec3 entry = shadowRay.at(point);
+        shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
+        scene->intersect(shadowRay, point);
+        glm::dvec3 exit = shadowRay.at(point);
+        double distance = glm::distance(entry, exit);
+        //Found distance, now do the transulcent light formula
+        light *= glm::pow(point.getMaterial().kt(point), glm::dvec3(distance));
+        //Great, now get the next material's intersection and continue.
+        shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
+        scene->intersect(shadowRay, point);
     }
     return light;
 }
@@ -55,12 +65,23 @@ glm::dvec3 PointLight::getRelativeDirection(const glm::dvec3 &P) const {
 glm::dvec3 PointLight::shadowAttenuation(const ray &r,
                                          const glm::dvec3 &p) const {
     glm::dvec3 light = getColor();
+    double lightT = glm::sqrt(glm::dot(position - p, position - p));
     isect point;
     ray shadowRay = r;
     scene->intersect(shadowRay, point);
-    double lightT = glm::sqrt(glm::dot(position - p, position - p));
-    if(point.getT() < lightT){
-        light *= point.getMaterial().kt(point);
+    while(point.getT() < lightT){
+        cout << point.getT() << endl;
+        //We intersected a material before the light. Now we need to get the other side to find the distance.
+        glm::dvec3 entry = shadowRay.at(point);
+        shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
+        scene->intersect(shadowRay, point);
+        glm::dvec3 exit = shadowRay.at(point);
+        double distance = glm::distance(entry, exit);
+        //Found distance, now do the transulcent light formula
+        light *= glm::pow(point.getMaterial().kt(point), glm::dvec3(distance));
+        //Great, now get the next material's intersection and continue.
+        shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
+        scene->intersect(shadowRay, point);
     }
     return light;
 }
