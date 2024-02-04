@@ -20,7 +20,6 @@ glm::dvec3 DirectionalLight::shadowAttenuation(const ray &r,
     ray shadowRay = r;
     scene->intersect(shadowRay, point);
     while(point.getT() < 1000){
-        cout << point.getT() << endl;
         //We intersected a material before the light. Now we need to get the other side to find the distance.
         glm::dvec3 entry = shadowRay.at(point);
         shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
@@ -70,7 +69,6 @@ glm::dvec3 PointLight::shadowAttenuation(const ray &r,
     ray shadowRay = r;
     scene->intersect(shadowRay, point);
     while(point.getT() < lightT){
-        cout << point.getT() << endl;
         //We intersected a material before the light. Now we need to get the other side to find the distance.
         glm::dvec3 entry = shadowRay.at(point);
         shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
