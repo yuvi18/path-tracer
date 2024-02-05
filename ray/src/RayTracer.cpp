@@ -72,6 +72,7 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	{
 		// Sample NxN pixels and average the color.
 		int aaLevel = traceUI->getSuperSamples();
+		cout << aaLevel << endl;
 		double aaOffsetStep = 1.0 / double(aaLevel);
 		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
 		{
