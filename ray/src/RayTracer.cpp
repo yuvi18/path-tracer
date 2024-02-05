@@ -73,7 +73,6 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 		// Sample NxN pixels and average the color.
 		int aaLevel = traceUI->getSuperSamples();
 		double aaOffsetStep = 1.0 / double(aaLevel);
-		unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
 		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
 		{
 			double x = (double(i) + xAaOffset) / double(buffer_width);
@@ -89,24 +88,6 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	pixel[1] = (int)(255.0 * color[1]);
 	pixel[2] = (int)(255.0 * color[2]);
 	return color;
-	//No anti-aliasing below
-//    glm::dvec3 col(0, 0, 0);
-//
-//    if (!sceneLoaded()){
-//        return col;
-//    }
-//
-//
-//    double x = double(i) / double(buffer_width);
-//    double y = double(j) / double(buffer_height);
-//
-//    unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
-//    col = trace(x, y);
-//
-//    pixel[0] = (int)(255.0 * col[0]);
-//    pixel[1] = (int)(255.0 * col[1]);
-//    pixel[2] = (int)(255.0 * col[2]);
-//    return col;
 }
 
 #define VERBOSE 0
