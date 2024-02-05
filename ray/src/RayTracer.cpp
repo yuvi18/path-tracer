@@ -41,35 +41,55 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	{
 		scene->clearIntersectCache();
 	}
-
-	ray r(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0), glm::dvec3(1, 1, 1),
-		  ray::VISIBILITY);
-	scene->getCamera().rayThrough(x, y, r);
-	double dummy;
-	glm::dvec3 ret =
-		traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
-	ret = glm::clamp(ret, 0.0, 1.0);
-	return ret;
+	else
+	{
+		ray r(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0), glm::dvec3(1, 1, 1),
+			  ray::VISIBILITY);
+		scene->getCamera().rayThrough(x, y, r);
+		double dummy;
+		glm::dvec3 ret =
+			traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
+		ret = glm::clamp(ret, 0.0, 1.0);
+		return ret;
+	}
 }
 
 // Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
-	glm::dvec3 col(0, 0, 0);
-
+	glm::dvec3 color(0, 0, 0);
 	if (!sceneLoaded())
-		return col;
-
-	double x = double(i) / double(buffer_width);
-	double y = double(j) / double(buffer_height);
+		return color;
 
 	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
-	col = trace(x, y);
-
-	pixel[0] = (int)(255.0 * col[0]);
-	pixel[1] = (int)(255.0 * col[1]);
-	pixel[2] = (int)(255.0 * col[2]);
-	return col;
+	bool antiAlias = traceUI->aaSwitch();
+	if (!antiAlias)
+	{
+		double x = double(i) / double(buffer_width);
+		double y = double(j) / double(buffer_height);
+		color = trace(x, y);
+	}
+	else
+	{
+		// Sample NxN pixels and average the color.
+		int aaLevel = traceUI->getSuperSamples();
+		double aaOffsetStep = 1.0 / double(aaLevel);
+		unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
+		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
+		{
+			double x = (double(i) + xAaOffset) / double(buffer_width);
+			for (double yAaOffset = -aaOffsetStep; yAaOffset <= aaOffsetStep; yAaOffset += aaOffsetStep)
+			{
+				double y = (double(j) + yAaOffset) / double(buffer_height);
+				color += trace(x, y);
+			}
+		}
+		color /= double(aaLevel * aaLevel);
+	}
+	pixel[0] = (int)(255.0 * color[0]);
+	pixel[1] = (int)(255.0 * color[1]);
+	pixel[2] = (int)(255.0 * color[2]);
+	return color;
 }
 
 #define VERBOSE 0
@@ -329,6 +349,7 @@ void RayTracer::traceImage(int w, int h)
 			tracePixel(i, j);
 		}
 	}
+	tracePixel(225, 250);
 }
 
 int RayTracer::aaImage()
