@@ -92,7 +92,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		const Material &m = i.getMaterial(); // 1. get the material.
 		colorC = m.shade(scene.get(), r, i);
 		glm::dvec3 normal = i.getN();
-		bool insideMesh = glm::dot(-r.getDirection(), normal) <= 0;
+		bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
 		double d = 0;
 		if(insideMesh){
 		    //Came out of transculenct material
@@ -101,9 +101,13 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		    d = glm::distance(startPos, endPos);
 		}
 		// Reflect
-		if (!insideMesh && m.Refl()){
-			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), normal) * normal + r.getDirection();
-			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
+		if (m.Refl()){
+		    glm::dvec3 reflectNorm = normal;
+		    if(insideMesh){
+		        reflectNorm = -reflectNorm;
+		    }
+			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), reflectNorm) * reflectNorm + r.getDirection();
+			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * reflectNorm;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
 			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t);
 			colorC += reflResult;
@@ -128,6 +132,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
             //Exiting, so attenuiate by the distance
             colorC *= glm::pow(m.kt(i), glm::dvec3(d));
         }
+        return colorC;
 	}
 	else
 	{
@@ -324,7 +329,6 @@ void RayTracer::traceImage(int w, int h)
 			tracePixel(i, j);
 		}
 	}
-	tracePixel(225, 250);
 }
 
 int RayTracer::aaImage()
