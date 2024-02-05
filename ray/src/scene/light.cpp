@@ -75,12 +75,14 @@ glm::dvec3 PointLight::shadowAttenuation(const ray &r,
         glm::dvec3 exit = shadowRay.at(point);
         double distance = glm::distance(entry, exit);
         //Found distance, now do the transulcent light formula
+//        cout << "Found distance: "  << distance << endl;
         light *= glm::pow(point.getMaterial().kt(point), glm::dvec3(distance));
         //Great, now get the next material's intersection and continue.
         shadowRay.setPosition(shadowRay.at(point.getT() + RAY_EPSILON));
         scene->intersect(shadowRay, point);
         lightT = glm::sqrt(glm::dot(position - shadowRay.getPosition(), position - shadowRay.getPosition()));
     }
+//    cout <<"Return value: " << light << endl;
     return light;
 }
 

@@ -23,7 +23,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
   glm::dvec3 diffuseTerm(0, 0, 0);
   glm::dvec3 specularTerm(0, 0, 0);
   for ( const auto& pLight : scene->getAllLights() ){
-      glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON;
+      glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON * 3.0;
       glm::dvec3 fireDirection = pLight->getDirection(firePos);
       glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
       ray shadowRay(firePos, fireDirection, fireWeight, ray::SHADOW);
@@ -34,7 +34,6 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const {
       contributionD *= kd(i);
       contributionD *= glm::abs(glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
       diffuseTerm += contributionD;
-
       //Specular Term
       glm::dvec3 contributionS = pLight->shadowAttenuation(shadowRay, firePos);
       contributionS *= pLight->distanceAttenuation(pointOfImpact);

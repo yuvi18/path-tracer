@@ -350,8 +350,8 @@ void RayTracer::traceImage(int w, int h)
 		{
 			tracePixel(i, j);
 		}
+//		cout << i << endl;
 	}
-	tracePixel(384, 262);
 }
 
 int RayTracer::aaImage()
