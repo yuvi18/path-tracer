@@ -96,6 +96,7 @@ class TrimeshFace {
   glm::dvec3 normal;
   double dist;
   BoundingBox bounds;
+  glm::dmat2 AMat;
 
 public:
   TrimeshFace(Trimesh *parent, int a, int b, int c) {
@@ -124,6 +125,13 @@ public:
     }
     localbounds = ComputeLocalBoundingBox();
     bounds = localbounds;
+
+    double aTerm1 = glm::dot(b_coords - a_coords, b_coords - a_coords);
+    double aTerm2 = glm::dot(b_coords - a_coords, c_coords - a_coords);
+    double aTerm3 = glm::dot(c_coords - a_coords, b_coords - a_coords);
+    double aTerm4 = glm::dot(c_coords - a_coords, c_coords - a_coords);
+    AMat = glm::dmat2(aTerm1, aTerm2, aTerm3, aTerm4);
+    AMat = glm::inverse(AMat);
   }
 
   BoundingBox localbounds;
