@@ -444,13 +444,13 @@ void DebuggingView::drawRays() {
     case ray::REFLECTION:
       if (!m_showReflectionRays)
         continue;
-      glColor4f(1.0f, 0.4f, 0.4f, 1.0f);
+      glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
       break;
 
     case ray::REFRACTION:
       if (!m_showRefractionRays)
         continue;
-      glColor4f(0.6f, 0.2f, 0.8f, 1.0f);
+      glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
       break;
 
     case ray::SHADOW:
