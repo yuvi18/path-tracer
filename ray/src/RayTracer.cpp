@@ -41,55 +41,71 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	{
 		scene->clearIntersectCache();
 	}
-	else
-	{
-		ray r(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0), glm::dvec3(1, 1, 1),
-			  ray::VISIBILITY);
-		scene->getCamera().rayThrough(x, y, r);
-		double dummy;
-		glm::dvec3 ret =
+
+	ray r(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0), glm::dvec3(1, 1, 1),
+       ray::VISIBILITY);
+	scene->getCamera().rayThrough(x, y, r);
+	double dummy;
+	glm::dvec3 ret =
 			traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
-		ret = glm::clamp(ret, 0.0, 1.0);
-		return ret;
-	}
+	ret = glm::clamp(ret, 0.0, 1.0);
+	return ret;
+
 }
 
 // Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
-	glm::dvec3 color(0, 0, 0);
-	if (!sceneLoaded())
-		return color;
+//	glm::dvec3 color(0, 0, 0);
+//	if (!sceneLoaded())
+//		return color;
+//
+//	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
+//	bool antiAlias = traceUI->aaSwitch();
+//	if (!antiAlias)
+//	{
+//		double x = double(i) / double(buffer_width);
+//		double y = double(j) / double(buffer_height);
+//		color = trace(x, y);
+//	}
+//	else
+//	{
+//		// Sample NxN pixels and average the color.
+//		int aaLevel = traceUI->getSuperSamples();
+//		double aaOffsetStep = 1.0 / double(aaLevel);
+//		unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
+//		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
+//		{
+//			double x = (double(i) + xAaOffset) / double(buffer_width);
+//			for (double yAaOffset = -aaOffsetStep; yAaOffset <= aaOffsetStep; yAaOffset += aaOffsetStep)
+//			{
+//				double y = (double(j) + yAaOffset) / double(buffer_height);
+//				color += trace(x, y);
+//			}
+//		}
+//		color /= double(aaLevel * aaLevel);
+//	}
+//	pixel[0] = (int)(255.0 * color[0]);
+//	pixel[1] = (int)(255.0 * color[1]);
+//	pixel[2] = (int)(255.0 * color[2]);
+//	return color;
+    glm::dvec3 col(0, 0, 0);
 
-	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
-	bool antiAlias = traceUI->aaSwitch();
-	if (!antiAlias)
-	{
-		double x = double(i) / double(buffer_width);
-		double y = double(j) / double(buffer_height);
-		color = trace(x, y);
-	}
-	else
-	{
-		// Sample NxN pixels and average the color.
-		int aaLevel = traceUI->getSuperSamples();
-		double aaOffsetStep = 1.0 / double(aaLevel);
-		unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
-		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
-		{
-			double x = (double(i) + xAaOffset) / double(buffer_width);
-			for (double yAaOffset = -aaOffsetStep; yAaOffset <= aaOffsetStep; yAaOffset += aaOffsetStep)
-			{
-				double y = (double(j) + yAaOffset) / double(buffer_height);
-				color += trace(x, y);
-			}
-		}
-		color /= double(aaLevel * aaLevel);
-	}
-	pixel[0] = (int)(255.0 * color[0]);
-	pixel[1] = (int)(255.0 * color[1]);
-	pixel[2] = (int)(255.0 * color[2]);
-	return color;
+    if (!sceneLoaded()){
+        return col;
+    }
+
+
+    double x = double(i) / double(buffer_width);
+    double y = double(j) / double(buffer_height);
+
+    unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
+    col = trace(x, y);
+
+    pixel[0] = (int)(255.0 * col[0]);
+    pixel[1] = (int)(255.0 * col[1]);
+    pixel[2] = (int)(255.0 * col[2]);
+    return col;
 }
 
 #define VERBOSE 0
@@ -126,7 +142,8 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		    if(insideMesh){
 		        reflectNorm = -reflectNorm;
 		    }
-			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), reflectNorm) * reflectNorm + r.getDirection();
+//			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), reflectNorm) * reflectNorm + r.getDirection();
+            glm::dvec3 reflDir = glm::reflect(r.getDirection(), reflectNorm);
 			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * reflectNorm;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
 			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t);
@@ -140,11 +157,13 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
                 ratio = m.index(i);
                 refractNorm = -normal;
 		    }
+		    glm::dvec3 refractPos = r.at(i.getT() + RAY_EPSILON);
             glm::dvec3 refractDir = glm::refract(r.getDirection(), refractNorm, ratio);
 		    if(refractDir == glm::dvec3(0)){
 		        refractDir = glm::reflect(r.getDirection(), refractNorm);
+                refractPos = r.at(i.getT() - RAY_EPSILON);
 		    }
-		    ray refractRay = ray(r.at(i.getT() + RAY_EPSILON), refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
+		    ray refractRay = ray(refractPos, refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
             glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t);
             colorC += refractResult;
 		}
@@ -349,7 +368,7 @@ void RayTracer::traceImage(int w, int h)
 			tracePixel(i, j);
 		}
 	}
-	tracePixel(225, 250);
+	tracePixel(384, 262);
 }
 
 int RayTracer::aaImage()
