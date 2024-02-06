@@ -43,14 +43,13 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	}
 
 	ray r(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0), glm::dvec3(1, 1, 1),
-       ray::VISIBILITY);
+		  ray::VISIBILITY);
 	scene->getCamera().rayThrough(x, y, r);
 	double dummy;
 	glm::dvec3 ret =
-			traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
+		traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
-
 }
 
 // Done.
@@ -62,7 +61,7 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 
 	unsigned char *pixel = buffer.data() + (i + j * buffer_width) * 3;
 	bool antiAlias = traceUI->aaSwitch();
-	if (!antiAlias)
+	if (!antiAlias || traceUI->getSuperSamples() <= 1)
 	{
 		double x = double(i) / double(buffer_width);
 		double y = double(j) / double(buffer_height);
@@ -72,17 +71,19 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	{
 		// Sample NxN pixels and average the color.
 		int aaLevel = traceUI->getSuperSamples();
-		double aaOffsetStep = 1.0 / double(aaLevel);
-		for (double xAaOffset = -aaOffsetStep; xAaOffset <= aaOffsetStep; xAaOffset += aaOffsetStep)
+		double aaOffsetStep = 2.0 / double(aaLevel);
+		int samples = 0;
+		for (double xAaOffset = aaOffsetStep - 1; xAaOffset <= 1 - aaOffsetStep; xAaOffset += aaOffsetStep)
 		{
 			double x = (double(i) + xAaOffset) / double(buffer_width);
-			for (double yAaOffset = -aaOffsetStep; yAaOffset <= aaOffsetStep; yAaOffset += aaOffsetStep)
+			for (double yAaOffset = aaOffsetStep - 1; yAaOffset <= 1 - aaOffsetStep; yAaOffset += aaOffsetStep)
 			{
 				double y = (double(j) + yAaOffset) / double(buffer_height);
 				color += trace(x, y);
+				samples += 1;
 			}
 		}
-		color /= double(aaLevel * aaLevel);
+		color /= double(samples);
 	}
 	pixel[0] = (int)(255.0 * color[0]);
 	pixel[1] = (int)(255.0 * color[1]);
@@ -102,8 +103,9 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 #if VERBOSE
 	std::cerr << "== current depth: " << depth << std::endl;
 #endif
-	if (depth < 0){
-        return glm::dvec3(0, 0, 0);
+	if (depth < 0)
+	{
+		return glm::dvec3(0, 0, 0);
 	}
 	else if (scene->intersect(r, i))
 	{
@@ -112,48 +114,55 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		glm::dvec3 normal = i.getN();
 		bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
 		double d = 0;
-		if(insideMesh){
-		    //Came out of transculenct material
-		    glm::dvec3 startPos = r.getPosition();
-		    glm::dvec3 endPos = r.at(i);
-		    d = glm::distance(startPos, endPos);
+		if (insideMesh)
+		{
+			// Came out of transculenct material
+			glm::dvec3 startPos = r.getPosition();
+			glm::dvec3 endPos = r.at(i);
+			d = glm::distance(startPos, endPos);
 		}
 		// Reflect
-		if (m.Refl()){
-		    glm::dvec3 reflectNorm = normal;
-		    if(insideMesh){
-		        reflectNorm = -reflectNorm;
-		    }
-//			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), reflectNorm) * reflectNorm + r.getDirection();
-            glm::dvec3 reflDir = glm::reflect(r.getDirection(), reflectNorm);
+		if (m.Refl())
+		{
+			glm::dvec3 reflectNorm = normal;
+			if (insideMesh)
+			{
+				reflectNorm = -reflectNorm;
+			}
+			//			glm::dvec3 reflDir = 2 * glm::dot(-r.getDirection(), reflectNorm) * reflectNorm + r.getDirection();
+			glm::dvec3 reflDir = glm::reflect(r.getDirection(), reflectNorm);
 			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * reflectNorm;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
 			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t);
 			colorC += reflResult;
 		}
-		if(m.Trans()){
-		    //Normal Refraction
-		    double ratio = 1 / m.index(i);
-		    glm::dvec3 refractNorm = normal;
-		    if(insideMesh){
-                ratio = m.index(i);
-                refractNorm = -normal;
-		    }
-		    glm::dvec3 refractPos = r.at(i.getT() + RAY_EPSILON);
-            glm::dvec3 refractDir = glm::refract(r.getDirection(), refractNorm, ratio);
-		    if(refractDir == glm::dvec3(0)){
-		        refractDir = glm::reflect(r.getDirection(), refractNorm);
-                refractPos = r.at(i.getT() - RAY_EPSILON);
-		    }
-		    ray refractRay = ray(refractPos, refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
-            glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t);
-            colorC += refractResult;
+		if (m.Trans())
+		{
+			// Normal Refraction
+			double ratio = 1 / m.index(i);
+			glm::dvec3 refractNorm = normal;
+			if (insideMesh)
+			{
+				ratio = m.index(i);
+				refractNorm = -normal;
+			}
+			glm::dvec3 refractPos = r.at(i.getT() + RAY_EPSILON);
+			glm::dvec3 refractDir = glm::refract(r.getDirection(), refractNorm, ratio);
+			if (refractDir == glm::dvec3(0))
+			{
+				refractDir = glm::reflect(r.getDirection(), refractNorm);
+				refractPos = r.at(i.getT() - RAY_EPSILON);
+			}
+			ray refractRay = ray(refractPos, refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
+			glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t);
+			colorC += refractResult;
 		}
-        if(insideMesh){
-            //Exiting, so attenuiate by the distance
-            colorC *= glm::pow(m.kt(i), glm::dvec3(d));
-        }
-        return colorC;
+		if (insideMesh)
+		{
+			// Exiting, so attenuiate by the distance
+			colorC *= glm::pow(m.kt(i), glm::dvec3(d));
+		}
+		return colorC;
 	}
 	else
 	{
