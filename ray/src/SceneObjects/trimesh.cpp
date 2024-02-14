@@ -60,11 +60,7 @@ const char *Trimesh::doubleCheck() {
 
 void Trimesh::buildTree(){
     if(this->tree == nullptr){
-        std::vector<Geometry *> geometryVector;
-        for(auto i : faces){
-            geometryVector.push_back((Geometry *) i);
-        }
-        this->tree = new BVH(geometryVector);
+        this->tree = new BVH<TrimeshFace>(faces);
     }
 }
 

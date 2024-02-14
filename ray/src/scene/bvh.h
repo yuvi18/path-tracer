@@ -14,22 +14,24 @@
 
 using namespace std;
 
+template <typename T>
 struct BVHNode
 {
     BoundingBox nodeBounds;
     BVHNode* left, *right;
     bool isLeaf = false;
-    Geometry* geometryObject = nullptr;
+    T* geometryObject = nullptr;
 };
 
+template <typename objType>
 class BVH {
 
-    BVHNode* root;
-    vector<BVHNode*> allNodes;
+    BVHNode<objType>* root;
+    vector<BVHNode<objType>*> allNodes;
 
 public:
     //Inefficent cause it copies vectors over. Maybe cause memory errors? Definitely make sure this is ok.
-    void makeBVH(BVHNode* curr, vector<BVHNode*> children){
+    void makeBVH(BVHNode<objType>* curr, vector<BVHNode<objType>*> children){
 
         //if leaf, terminalte
 
@@ -42,10 +44,11 @@ public:
 
     }
 
-    BVH(vector<Geometry*> &geometryObjects){
-        for(Geometry* i : geometryObjects){
+    BVH(vector<objType*> &geometryObjects){
+        for(objType* i : geometryObjects){
+            cout << i << endl;
             if(i->hasBoundingBoxCapability()){
-                BVHNode* newNode = new BVHNode();
+                BVHNode<objType>* newNode = new BVHNode<objType>();
                 newNode->nodeBounds = i->getBoundingBox();
                 newNode->isLeaf = true;
                 newNode->geometryObject = i;
@@ -55,7 +58,7 @@ public:
                 throw("Uh oh, can't create bounding box.");
             }
         }
-        root = new BVHNode();
+        root = new BVHNode<objType>();
         for(auto i : allNodes){
             root->nodeBounds.merge(i->nodeBounds);
             cout << root->nodeBounds.getMin() << endl;

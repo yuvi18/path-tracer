@@ -29,7 +29,7 @@ class Trimesh : public SceneObject {
   VertColors vertColors;
   UVCoords uvCoords;
   BoundingBox localBounds;
-  BVH* tree;
+  BVH<TrimeshFace>* tree;
 
 public:
   Trimesh(Scene *scene, Material *mat, MatrixTransform transform)
