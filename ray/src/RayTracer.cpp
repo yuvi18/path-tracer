@@ -343,7 +343,7 @@ void RayTracer::traceImage(int w, int h)
 {
 	// Always call traceSetup before rendering anything.
 	traceSetup(w, h);
-
+    cout << scene->getAllObjects().size() << endl;
 	// YOUR CODE HERE
 	// FIXME: Start one or more threads for ray tracing
 	//
