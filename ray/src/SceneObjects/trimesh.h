@@ -29,6 +29,7 @@ class Trimesh : public SceneObject {
   VertColors vertColors;
   UVCoords uvCoords;
   BoundingBox localBounds;
+  BVH* tree;
 
 public:
   Trimesh(Scene *scene, Material *mat, MatrixTransform transform)
@@ -54,8 +55,9 @@ public:
   const char *doubleCheck();
 
   void generateNormals();
+  void buildTree();
 
-  bool hasBoundingBoxCapability() const { return true; }
+    bool hasBoundingBoxCapability() const { return true; }
 
   BoundingBox ComputeLocalBoundingBox() {
     BoundingBox localbounds;
