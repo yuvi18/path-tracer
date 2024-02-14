@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-#include "../scene/BVH.h"
+#include "../scene/bvh.h"
 #include "../scene/material.h"
 #include "../scene/ray.h"
 #include "../scene/scene.h"

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BVH_H__
+#define BVH_H__
+
 #include "bbox.h"
 #include "scene.h"
 #include <glm/gtx/io.hpp>
@@ -26,7 +28,19 @@ class BVH {
     vector<BVHNode*> allNodes;
 
 public:
-    void makeBVH(BVHNode* curr, vector<BVHNode*> children);
+    //Inefficent cause it copies vectors over. Maybe cause memory errors? Definitely make sure this is ok.
+    void makeBVH(BVHNode* curr, vector<BVHNode*> children){
+
+        //if leaf, terminalte
+
+        //Find longest axis
+
+        //Split Group in Halves
+
+        //Create child nodes for each half
+
+
+    }
 
     BVH(vector<Geometry*> &geometryObjects){
         for(Geometry* i : geometryObjects){
@@ -50,3 +64,4 @@ public:
     }
 
 };
+#endif
