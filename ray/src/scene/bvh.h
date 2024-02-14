@@ -60,6 +60,8 @@ public:
             root->nodeBounds.merge(i->nodeBounds);
             cout << root->nodeBounds.getMin() << endl;
         }
+        cout << root->nodeBounds.getMin() << endl;
+        exit(0);
         makeBVH(root, this->allNodes);
     }
 

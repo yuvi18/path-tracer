@@ -234,7 +234,8 @@ Trimesh *parseTrimeshBody(const json &j, ParseData &pd) {
     t->generateNormals();
   }
 
-
+  //Build BVH
+  t->buildTree();
 
   return t;
 }
