@@ -23,6 +23,8 @@ struct BVHNode
     int amt;
 };
 
+
+
 template <typename objType>
 class BVH {
 
@@ -117,6 +119,10 @@ public:
         root = new BVHNode();
         makeBVH(root, 0, allNodes.size());
         exit(0);
+    }
+
+    bool checkIntersect(BVH* curr, ray &r, isect &i) {
+
     }
 
 };
