@@ -14,27 +14,35 @@
 
 using namespace std;
 
-template <typename T>
 struct BVHNode
 {
     BoundingBox nodeBounds;
     BVHNode* left, *right;
     bool isLeaf = false;
-    T* geometryObject = nullptr;
+    int geoIdx;
+    int amt;
 };
 
 template <typename objType>
 class BVH {
 
-    BVHNode<objType>* root;
-    vector<BVHNode<objType>*> allNodes;
+    BVHNode* root;
+    vector<BVHNode*> allNodes;
+    vector<objType*> geoObjects;
 
 public:
-    void makeBVH(BVHNode<objType>* curr, int beginIdx, int endIdx){
-        cout << beginIdx << " " << endIdx << endl;
+    void makeBVH(BVHNode* curr, int beginIdx, int amt){
+        int endIdx = beginIdx + amt - 1;
         //Create bounding box
         for(int k = beginIdx; k <= endIdx; k++){
             curr->nodeBounds.merge(allNodes[k]->nodeBounds);
+        }
+        curr->geoIdx = beginIdx;
+        curr->amt = amt;
+        //Terminate early if <= 2
+        if(curr->amt <= 2){
+            curr->isLeaf = true;
+            return;
         }
 
         //Find longest axis
@@ -50,8 +58,6 @@ public:
         }
         //Quickly Sort among current group by axis (half and half)
         double half = lengths[axis] / 2 + curr->nodeBounds.getMin()[axis];
-        cout << "half: " << half << " on " << axis << endl;
-        cout << "Bounding box is " << curr->nodeBounds.getMin() << " to " << curr->nodeBounds.getMax() << endl;
         int i = beginIdx;
         int j = endIdx;
         while(i <= j){
@@ -66,7 +72,6 @@ public:
                 i++;
             }
         }
-
         //Sanity Check
         for(int k = beginIdx; k <= endIdx; k++){
             double midPoint = (allNodes[k]->nodeBounds.getMin()[axis] + allNodes[k]->nodeBounds.getMax()[axis]) / 2;
@@ -78,42 +83,39 @@ public:
             }
         }
         //Create child nodes for each half
-        BVHNode<objType>* left;
-        BVHNode<objType>* right;
-        //Now a leaf so don't recurse
-        if(beginIdx == i - 1) {
-            left = allNodes[beginIdx];
+        BVHNode* left;
+        BVHNode* right;
+        left = new BVHNode();
+        int leftCount = i - beginIdx;
+        //if empty box on left or right, we should just make it a leaf.
+        if(leftCount == 0 || leftCount == amt){
+            curr->isLeaf = true;
+            return;
         }
-        else{
-            //Otherwise create intermediary node and recurse
-            left = new BVHNode<objType>();
-            makeBVH(left, beginIdx, i - 1);
-        }
+        int rightCount = amt - leftCount;
+        makeBVH(left, beginIdx, leftCount);
         //Same thing here
-        if(endIdx == i){
-            right = allNodes[endIdx];
-        }
-        else{
-            right = new BVHNode<objType>();
-            makeBVH(right, i, endIdx);
-        }
+        right = new BVHNode();
+        makeBVH(right, i, rightCount);
     }
 
-    BVH(vector<objType*> &geometryObjects){
-        for(objType* i : geometryObjects){
-            if(i->hasBoundingBoxCapability()){
-                BVHNode<objType>* newNode = new BVHNode<objType>();
-                newNode->nodeBounds = i->getBoundingBox();
+    BVH(vector<objType*> geometryObjects){
+        geoObjects = geometryObjects;
+        for(int i = 0; i < geometryObjects.size(); i++){
+            if(geometryObjects[i]->hasBoundingBoxCapability()){
+                BVHNode* newNode = new BVHNode();
+                newNode->nodeBounds = geometryObjects[i]->getBoundingBox();
                 newNode->isLeaf = true;
-                newNode->geometryObject = i;
+                newNode->geoIdx = i;
+                newNode->amt = 1;
                 allNodes.push_back(newNode);
             }
             else{
                 throw("Uh oh, can't create bounding box.");
             }
         }
-        root = new BVHNode<objType>();
-        makeBVH(root, 0, allNodes.size() - 1);
+        root = new BVHNode();
+        makeBVH(root, 0, allNodes.size());
         exit(0);
     }
 
