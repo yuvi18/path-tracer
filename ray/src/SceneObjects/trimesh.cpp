@@ -65,16 +65,18 @@ void Trimesh::buildTree(){
 }
 
 bool Trimesh::intersectLocal(ray &r, isect &i) const {
-    bool have_one = false;
-    for (auto face : faces) {
-        isect cur;
-        if (face->intersectLocal(r, cur)) {
-            if (!have_one || (cur.getT() < i.getT())) {
-                i = cur;
-                have_one = true;
-            }
-        }
-    }
+//    bool have_one = false;
+//    for (auto face : faces) {
+//        isect cur;
+//        if (face->intersectLocal(r, cur)) {
+//            if (!have_one || (cur.getT() < i.getT())) {
+//                i = cur;
+//                have_one = true;
+//            }
+//        }
+//    }
+    i.setT(1000.0);
+    bool have_one = this->tree->intersect(r, i);
     if (!have_one){
         i.setT(1000.0);
     }

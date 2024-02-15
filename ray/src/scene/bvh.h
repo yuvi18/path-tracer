@@ -103,6 +103,8 @@ public:
         //Same thing here
         right = new BVHNode();
         makeBVH(right, i, rightCount);
+        curr->left = left;
+        curr->right = right;
     }
 
     BVH(vector<objType*> geometryObjects){
@@ -120,12 +122,34 @@ public:
         }
         root = new BVHNode();
         makeBVH(root, 0, allNodes.size());
-        exit(0);
     }
 
-    bool checkIntersect(BVH* curr, ray &r, isect &i) {
-
+    bool checkIntersect(BVHNode* curr, ray &r, isect &i) {
+        double trash  = 0;
+        double trash2 = 0;
+        if(!curr->nodeBounds.intersect(r, trash, trash2)){
+            //Terminate if doesn't intersect bounding box
+            return false;
+        }
+        if(curr->isLeaf){
+            bool intersected = false;
+            for(int j = 0; j < curr->amt; j++){
+                isect test;
+                bool check = geoObjects[allNodes[curr->indirIdx + j]->geoIdx]->intersect(r, test);
+                if(check && test.getT() < i.getT()){
+                    i = test;
+                }
+                intersected |= check;
+            }
+            return intersected;
+        }
+        else{
+            //Recurse
+            return checkIntersect(curr->left, r, i) || checkIntersect(curr->right, r, i);
+        }
     }
-
+    bool intersect(ray &r, isect &i){
+        return checkIntersect(root, r, i);
+    }
 };
 #endif

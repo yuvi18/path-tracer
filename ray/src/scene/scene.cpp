@@ -130,7 +130,8 @@ bool Scene::intersect(ray &r, isect &i) const {
   if (TraceUI::m_debug) {
     addToIntersectCache(std::make_pair(new ray(r), new isect(i)));
   }
-  return have_one;
+
+    return have_one;
 }
 
 TextureMap *Scene::getTexture(string name) {
