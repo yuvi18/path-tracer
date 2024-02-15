@@ -19,17 +19,21 @@ struct BVHNode
     BoundingBox nodeBounds;
     BVHNode* left, *right;
     bool isLeaf = false;
-    int geoIdx;
+    int indirIdx;
     int amt;
 };
 
-
+struct IndirectGeo
+{
+    BoundingBox nodeBounds;
+    int geoIdx;
+};
 
 template <typename objType>
 class BVH {
 
     BVHNode* root;
-    vector<BVHNode*> allNodes;
+    vector<IndirectGeo*> allNodes;
     vector<objType*> geoObjects;
 
 public:
@@ -39,7 +43,7 @@ public:
         for(int k = beginIdx; k <= endIdx; k++){
             curr->nodeBounds.merge(allNodes[k]->nodeBounds);
         }
-        curr->geoIdx = beginIdx;
+        curr->indirIdx = beginIdx;
         curr->amt = amt;
         //Terminate early if <= 2
         if(curr->amt <= 2){
@@ -105,12 +109,10 @@ public:
         geoObjects = geometryObjects;
         for(int i = 0; i < geometryObjects.size(); i++){
             if(geometryObjects[i]->hasBoundingBoxCapability()){
-                BVHNode* newNode = new BVHNode();
-                newNode->nodeBounds = geometryObjects[i]->getBoundingBox();
-                newNode->isLeaf = true;
-                newNode->geoIdx = i;
-                newNode->amt = 1;
-                allNodes.push_back(newNode);
+                IndirectGeo* newGeo = new IndirectGeo();
+                newGeo->nodeBounds = geometryObjects[i]->getBoundingBox();
+                newGeo->geoIdx = i;
+                allNodes.push_back(newGeo);
             }
             else{
                 throw("Uh oh, can't create bounding box.");
