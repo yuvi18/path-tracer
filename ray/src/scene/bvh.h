@@ -30,23 +30,77 @@ class BVH {
     vector<BVHNode<objType>*> allNodes;
 
 public:
-    //Inefficent cause it copies vectors over. Maybe cause memory errors? Definitely make sure this is ok.
-    void makeBVH(BVHNode<objType>* curr, vector<BVHNode<objType>*> children){
-
-        //if leaf, terminalte
+    void makeBVH(BVHNode<objType>* curr, int beginIdx, int endIdx){
+        cout << beginIdx << " " << endIdx << endl;
+        //Create bounding box
+        for(int k = beginIdx; k <= endIdx; k++){
+            curr->nodeBounds.merge(allNodes[k]->nodeBounds);
+        }
 
         //Find longest axis
+        glm::dvec3 lengths = curr->nodeBounds.getMax() - curr->nodeBounds.getMin();
+        //Sanity check
+        assert(glm::abs(lengths) == lengths);
+        int axis = 0;
+        if(lengths[1] > lengths[axis]) {
+            axis = 1;
+        }
+        if(lengths[2] > lengths[axis]){
+            axis = 2;
+        }
+        //Quickly Sort among current group by axis (half and half)
+        double half = lengths[axis] / 2 + curr->nodeBounds.getMin()[axis];
+        cout << "half: " << half << " on " << axis << endl;
+        cout << "Bounding box is " << curr->nodeBounds.getMin() << " to " << curr->nodeBounds.getMax() << endl;
+        int i = beginIdx;
+        int j = endIdx;
+        while(i <= j){
+            double midPoint = (allNodes[i]->nodeBounds.getMin()[axis] + allNodes[i]->nodeBounds.getMax()[axis]) / 2;
+            if(midPoint >= half){
+                auto temp = allNodes[i];
+                allNodes[i] = allNodes[j];
+                allNodes[j] = temp;
+                j--;
+            }
+            else{
+                i++;
+            }
+        }
 
-        //Split Group in Halves
-
+        //Sanity Check
+        for(int k = beginIdx; k <= endIdx; k++){
+            double midPoint = (allNodes[k]->nodeBounds.getMin()[axis] + allNodes[k]->nodeBounds.getMax()[axis]) / 2;
+            if(k < i){
+                assert(midPoint < half);
+            }
+            else{
+                assert(midPoint >= half);
+            }
+        }
         //Create child nodes for each half
-
-
+        BVHNode<objType>* left;
+        BVHNode<objType>* right;
+        //Now a leaf so don't recurse
+        if(beginIdx == i - 1) {
+            left = allNodes[beginIdx];
+        }
+        else{
+            //Otherwise create intermediary node and recurse
+            left = new BVHNode<objType>();
+            makeBVH(left, beginIdx, i - 1);
+        }
+        //Same thing here
+        if(endIdx == i){
+            right = allNodes[endIdx];
+        }
+        else{
+            right = new BVHNode<objType>();
+            makeBVH(right, i, endIdx);
+        }
     }
 
     BVH(vector<objType*> &geometryObjects){
         for(objType* i : geometryObjects){
-            cout << i << endl;
             if(i->hasBoundingBoxCapability()){
                 BVHNode<objType>* newNode = new BVHNode<objType>();
                 newNode->nodeBounds = i->getBoundingBox();
@@ -59,13 +113,8 @@ public:
             }
         }
         root = new BVHNode<objType>();
-        for(auto i : allNodes){
-            root->nodeBounds.merge(i->nodeBounds);
-            cout << root->nodeBounds.getMin() << endl;
-        }
-        cout << root->nodeBounds.getMin() << endl;
+        makeBVH(root, 0, allNodes.size() - 1);
         exit(0);
-        makeBVH(root, this->allNodes);
     }
 
 };
