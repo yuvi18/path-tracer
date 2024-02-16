@@ -593,7 +593,7 @@ std::vector<Trimesh *> parseObjmeshBody(const json &j, ParseData &pd) {
     }
 
 
-
+    t->buildTree();
     results.push_back(t);
   }
   return results;
