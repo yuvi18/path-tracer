@@ -75,16 +75,17 @@ bool Trimesh::intersectLocal(ray &r, isect &i) const {
 //            }
 //        }
 //    }
+//    if (!have_one){
+//        i.setT(1000.0);
+//    }
     i.setT(1000.0);
     bool have_one = this->tree->intersect(r, i);
-    if (!have_one){
-        i.setT(1000.0);
-    }
+    have_one = this->tree->intersect(r, i);
     return have_one;
 }
 
 bool TrimeshFace::intersect(ray &r, isect &i) const {
-  return intersectLocal(r, i);
+      return intersectLocal(r, i);
 }
 
 

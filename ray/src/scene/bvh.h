@@ -11,7 +11,7 @@
 #include <string.h>
 #include <iostream>
 #include <vector>
-
+//TODO: Make deconstructors
 using namespace std;
 
 struct BVHNode
@@ -122,7 +122,28 @@ public:
         }
         root = new BVHNode();
         makeBVH(root, 0, allNodes.size());
+//        cout << "SANITY CHECK" << endl;
+//        sanityCheck(root, 0);
+//        cout << "SANITY CHECK END" << endl;
     }
+
+//    void sanityCheck(BVHNode* curr, int depth){
+//        if(curr == nullptr){
+//            return;
+//        }
+//        cout << "Depth is " << depth << endl;
+//        cout << "The bounding box for this node is:" << endl << curr->nodeBounds.getMin() << endl << curr->nodeBounds.getMax() << endl;
+//        if(curr->isLeaf){
+//            for(int j = 0; j < curr->amt; j++) {
+//                cout << allNodes[curr->indirIdx + j]->geoIdx << endl;
+//                cout << geoObjects[allNodes[curr->indirIdx + j]->geoIdx] << endl;
+//            }
+//        }
+//        cout <<"Moving left" << endl;
+//        sanityCheck(curr->left, depth + 1);
+//        cout << "Moving right" << endl;
+//        sanityCheck(curr->right, depth + 1);
+//    }
 
     bool checkIntersect(BVHNode* curr, ray &r, isect &i) {
         double trash  = 0;
@@ -145,7 +166,9 @@ public:
         }
         else{
             //Recurse
-            return checkIntersect(curr->left, r, i) || checkIntersect(curr->right, r, i);
+            bool result = checkIntersect(curr->left, r, i);
+            result |= checkIntersect(curr->right, r, i);
+            return result;
         }
     }
     bool intersect(ray &r, isect &i){
