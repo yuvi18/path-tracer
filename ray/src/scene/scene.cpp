@@ -126,11 +126,11 @@ bool Scene::intersect(ray &r, isect &i) const {
 //  }
 //  if (!have_one)
 //    i.setT(1000.0);
-  // if debugging,
   i.setT(1000.0);
   bool have_one = this->tree->intersect(r, i);
-  have_one = this->tree->intersect(r, i);
-  if (TraceUI::m_debug) {
+    // if debugging,
+
+    if (TraceUI::m_debug) {
     addToIntersectCache(std::make_pair(new ray(r), new isect(i)));
   }
 
@@ -147,7 +147,8 @@ TextureMap *Scene::getTexture(string name) {
 }
 
 void Scene::buildTree() {
-    if(tree != nullptr){
+
+    if(tree == nullptr){
         this->tree = new BVH<Geometry>(objects);
     }
 }
