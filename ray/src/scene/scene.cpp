@@ -112,21 +112,24 @@ void Scene::add(Light *light) { lights.emplace_back(light); }
 // Get any intersection with an object.  Return information about the
 // intersection through the reference parameter.
 bool Scene::intersect(ray &r, isect &i) const {
-  double tmin = 0.0;
-  double tmax = 0.0;
-  bool have_one = false;
-  for (const auto &obj : objects) {
-    isect cur;
-    if (obj->intersect(r, cur)) {
-      if (!have_one || (cur.getT() < i.getT())) {
-        i = cur;
-        have_one = true;
-      }
-    }
-  }
-  if (!have_one)
-    i.setT(1000.0);
+//  double tmin = 0.0;
+//  double tmax = 0.0;
+//  bool have_one = false;
+//  for (const auto &obj : objects) {
+//    isect cur;
+//    if (obj->intersect(r, cur)) {
+//      if (!have_one || (cur.getT() < i.getT())) {
+//        i = cur;
+//        have_one = true;
+//      }
+//    }
+//  }
+//  if (!have_one)
+//    i.setT(1000.0);
   // if debugging,
+  i.setT(1000.0);
+  bool have_one = this->tree->intersect(r, i);
+  have_one = this->tree->intersect(r, i);
   if (TraceUI::m_debug) {
     addToIntersectCache(std::make_pair(new ray(r), new isect(i)));
   }
@@ -141,4 +144,10 @@ TextureMap *Scene::getTexture(string name) {
     return textureCache[name].get();
   }
   return itr->second.get();
+}
+
+void Scene::buildTree() {
+    if(tree != nullptr){
+        this->tree = new BVH<Geometry>(objects);
+    }
 }

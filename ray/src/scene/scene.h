@@ -20,6 +20,7 @@
 #include "camera.h"
 #include "material.h"
 #include "ray.h"
+#include "bvh.h"
 
 #include <glm/geometric.hpp>
 #include <glm/mat3x3.hpp>
@@ -33,7 +34,7 @@ using std::unique_ptr;
 class Light;
 class Scene;
 
-template <typename Obj> class KdTree;
+template <typename Obj> class BVH;
 
 // A SceneElement is anything that lives within a scene. The behavior is
 // intentionally very barebones, since all actual entities are descended
@@ -199,7 +200,7 @@ public:
 
   const BoundingBox &bounds() const { return sceneBounds; }
 
-
+  void buildTree();
 private:
   /* Do not try to access these members directly. If you need to iterate
      over e.g. lights, use the following loop:
@@ -227,7 +228,7 @@ private:
   // hasBoundingBoxCapability() are exempt from this requirement.
   BoundingBox sceneBounds;
 
-  KdTree<Geometry> *kdtree;
+  BVH<Geometry>* tree;
 
   mutable std::mutex intersectionCacheMutex;
 

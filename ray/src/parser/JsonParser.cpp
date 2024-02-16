@@ -381,6 +381,8 @@ Scene *JsonParser::parseScene() {
     }
   }
 
+  //Build tree
+  scene->buildTree();
 
   return scene;
 }

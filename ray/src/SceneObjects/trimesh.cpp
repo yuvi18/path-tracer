@@ -80,7 +80,6 @@ bool Trimesh::intersectLocal(ray &r, isect &i) const {
 //    }
     i.setT(1000.0);
     bool have_one = this->tree->intersect(r, i);
-    have_one = this->tree->intersect(r, i);
     return have_one;
 }
 
