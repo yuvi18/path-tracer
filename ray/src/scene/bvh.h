@@ -11,7 +11,6 @@
 #include <string.h>
 #include <iostream>
 #include <vector>
-//TODO: Make deconstructors
 using namespace std;
 
 struct BVHNode
@@ -33,6 +32,7 @@ template <typename objType>
 class BVH {
 
     BVHNode* root;
+    vector<BVHNode*> garbageCollector;
     vector<IndirectGeo*> allNodes;
     vector<objType*> geoObjects;
 
@@ -105,6 +105,8 @@ public:
         makeBVH(right, i, rightCount);
         curr->left = left;
         curr->right = right;
+        garbageCollector.push_back(left);
+        garbageCollector.push_back(right);
     }
 
     BVH(vector<objType*> geometryObjects){
@@ -121,10 +123,20 @@ public:
             }
         }
         root = new BVHNode();
+        garbageCollector.push_back(root);
         makeBVH(root, 0, allNodes.size());
 //        cout << "SANITY CHECK" << endl;
 //        sanityCheck(root, 0);
 //        cout << "SANITY CHECK END" << endl;
+    }
+
+    ~BVH(){
+        for(auto i : garbageCollector){
+            delete i;
+        }
+        for(auto i : allNodes){
+            delete i;
+        }
     }
 
 //    void sanityCheck(BVHNode* curr, int depth){
