@@ -8,7 +8,7 @@ glm::dvec3 CubeMap::getColor(ray r) const
 {
   // YOUR CODE HERE
   // FIXME: Implement Cube Map here
-  glm::dvec3 dir = r.getDirection();
+  glm::dvec3 dir = glm::normalize(r.getDirection());
   // std::cout << d << std::endl;
   double absX = fabs(dir.x), absY = fabs(dir.y), absZ = fabs(dir.z);
   double max = fmax(fabs(absX), fmax(fabs(absY), fabs(absZ)));
