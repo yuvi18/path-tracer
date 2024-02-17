@@ -100,7 +100,7 @@ glm::dvec3 TextureMap::getPixelAt(int x, int y) const
   // raytracer, you need to implement this function.
   int w = width, h = height;
   if (x < 0 || x >= w || y < 0 || y >= h || data.size() < 3 * w * h)
-    return glm::dvec3(0, 0, 0);
+    return glm::dvec3();
   int startI = (x + y * w) * 3;
   return glm::dvec3(double(data[startI]), double(data[startI + 1]), double(data[startI + 2])) / 255.0;
 }
