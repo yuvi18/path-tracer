@@ -131,15 +131,9 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
     glm::dvec3 intersectPoint = r.at(t);
 
     //Barycentric coordinates
-//    double aTerm1 = glm::dot(b - a, b - a);
-//    double aTerm2 = glm::dot(b - a, c - a);
-//    double aTerm3 = glm::dot(c - a, b - a);
-//    double aTerm4 = glm::dot(c - a, c - a);
-//    glm::dmat2 AMat(aTerm1, aTerm2, aTerm3, aTerm4);
     double bTerm1 = glm::dot(intersectPoint - a, b - a);
     double bTerm2 = glm::dot(intersectPoint - a, c - a);
     glm::dvec2 bVec(bTerm1, bTerm2);
-//    glm::dvec2 partialBary = glm::inverse(AMat) * bVec;
     glm::dvec2 partialBary = AMat * bVec;
     glm::dvec3 fullBary(1 - partialBary[0] - partialBary[1], partialBary[0], partialBary[1]);
 
