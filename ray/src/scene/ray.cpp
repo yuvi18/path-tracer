@@ -3,24 +3,27 @@
 #include "material.h"
 #include "scene.h"
 
-
-const Material &isect::getMaterial() const {
+const Material &isect::getMaterial() const
+{
   return material ? *material : obj->getMaterial();
 }
 
 ray::ray(const glm::dvec3 &pp, const glm::dvec3 &dd, const glm::dvec3 &w,
          RayType tt)
-    : p(pp), d(dd), atten(w), t(tt) {
+    : p(pp), d(dd), atten(w), t(tt)
+{
   TraceUI::addRay(ray_thread_id);
 }
 
-ray::ray(const ray &other) : p(other.p), d(other.d), atten(other.atten), t(other.t) {
+ray::ray(const ray &other) : p(other.p), d(other.d), atten(other.atten), t(other.t)
+{
   TraceUI::addRay(ray_thread_id);
 }
 
 ray::~ray() {}
 
-ray &ray::operator=(const ray &other) {
+ray &ray::operator=(const ray &other)
+{
   p = other.p;
   d = other.d;
   atten = other.atten;

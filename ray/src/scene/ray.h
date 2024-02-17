@@ -26,9 +26,16 @@ extern thread_local unsigned int ray_thread_id;
 // A ray has a position where the ray starts, and a direction (which should
 // always be normalized!)
 
-class ray {
+class ray
+{
 public:
-  enum RayType { VISIBILITY, REFLECTION, REFRACTION, SHADOW };
+  enum RayType
+  {
+    VISIBILITY,
+    REFLECTION,
+    REFRACTION,
+    SHADOW
+  };
 
   ray(const glm::dvec3 &pp, const glm::dvec3 &dd, const glm::dvec3 &w,
       RayType tt = VISIBILITY);
@@ -55,10 +62,10 @@ private:
   RayType t;
 };
 
-
 // The description of an intersection point.
 
-class isect {
+class isect
+{
 public:
   isect()
       : obj(NULL), t(0.0), N(), uvCoordinates(), bary(), material(nullptr) {}
@@ -66,7 +73,8 @@ public:
 
   ~isect() {}
 
-  isect &operator=(const isect &other) {
+  isect &operator=(const isect &other)
+  {
     copyFromOther(other);
     return *this;
   }
@@ -80,7 +88,8 @@ public:
   void setN(const glm::dvec3 &n) { N = n; }
   glm::dvec3 getN() const { return N; }
 
-  void setMaterial(const Material &m) {
+  void setMaterial(const Material &m)
+  {
     if (material)
       *material = m;
     else
@@ -89,13 +98,15 @@ public:
   void setUVCoordinates(const glm::dvec2 &coords) { uvCoordinates = coords; }
   glm::dvec2 getUVCoordinates() const { return uvCoordinates; }
   void setBary(const glm::dvec3 &weights) { bary = weights; }
-  void setBary(const double alpha, const double beta, const double gamma) {
+  void setBary(const double alpha, const double beta, const double gamma)
+  {
     setBary(glm::dvec3(alpha, beta, gamma));
   }
   const Material &getMaterial() const;
 
 private:
-  void copyFromOther(const isect &other) {
+  void copyFromOther(const isect &other)
+  {
     if (this == &other)
       return;
     obj = other.obj;
@@ -103,9 +114,12 @@ private:
     N = other.N;
     bary = other.bary;
     uvCoordinates = other.uvCoordinates;
-    if (other.material) {
+    if (other.material)
+    {
       setMaterial(*other.material);
-    } else {
+    }
+    else
+    {
       material.reset();
     }
   }

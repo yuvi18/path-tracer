@@ -110,7 +110,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 	else if (scene->intersect(r, i))
 	{
 		const Material &m = i.getMaterial(); // 1. get the material.
-        colorC = m.shade(scene.get(), r, i);
+		colorC = m.shade(scene.get(), r, i);
 		glm::dvec3 normal = i.getN();
 		bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
 		double d = 0;
