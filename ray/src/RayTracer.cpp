@@ -186,6 +186,8 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 		if (traceUI->getCubeMap())
 		{
 			// There is a cube map.
+            CubeMap* theMap = traceUI->getCubeMap();
+            colorC = theMap->getColor(r);
 		}
 		else
 		{
