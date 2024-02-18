@@ -46,8 +46,9 @@ glm::dvec3 RayTracer::trace(double x, double y)
 		  ray::VISIBILITY);
 	scene->getCamera().rayThrough(x, y, r);
 	double dummy;
+	glm::dvec3 initialColorMulitplier(1.0, 1.0, 1.0);
 	glm::dvec3 ret =
-		traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy);
+		traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
 }
@@ -91,12 +92,12 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	return color;
 }
 
-#define VERBOSE 0
+#define VERBOSE 1
 
 // Do recursive ray tracing! You'll want to insert a lot of code here (or places
 // called from here) to handle reflection, refraction, etc etc.
 glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
-							   double &t)
+							   double &t, glm::dvec3 colorMultiplier)
 {
 	isect i;
 	glm::dvec3 colorC;
@@ -120,6 +121,11 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 			glm::dvec3 startPos = r.getPosition();
 			glm::dvec3 endPos = r.at(i);
 			d = glm::distance(startPos, endPos);
+            colorMultiplier *= pow(m.kt(i), glm::dvec3(d));
+		}
+		//Initial Terminate
+		if(glm::l2Norm(colorMultiplier) <= this->thresh){
+		    return glm::dvec3(0.0, 0.0, 0.0);
 		}
 		// Reflect
 		if (m.Refl())
@@ -133,7 +139,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 			glm::dvec3 reflDir = glm::reflect(r.getDirection(), reflectNorm);
 			glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * reflectNorm;
 			ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
-			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t);
+			glm::dvec3 reflResult = m.kr(i) * traceRay(reflRay, thresh, depth - 1, t, colorMultiplier * m.kr(i));
 			colorC += reflResult;
 		}
 		if (m.Trans())
@@ -154,7 +160,7 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 				refractPos = r.at(i.getT() - RAY_EPSILON);
 			}
 			ray refractRay = ray(refractPos, refractDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFRACTION);
-			glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t);
+			glm::dvec3 refractResult = traceRay(refractRay, thresh, depth - 1, t, colorMultiplier);
 			colorC += refractResult;
 		}
 		if (insideMesh)
