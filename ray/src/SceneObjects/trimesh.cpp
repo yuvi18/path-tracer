@@ -156,8 +156,16 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const {
         i.setN(normal);
     }
 
+    //If Mapped
+    if(!this->parent->uvCoords.empty()){
+        glm::dvec2 uvA = parent->uvCoords[this->ids[0]] * fullBary[0];
+        glm::dvec2 uvB = parent->uvCoords[this->ids[1]] * fullBary[1];
+        glm::dvec2 uvC = parent->uvCoords[this->ids[2]] * fullBary[2];
+        glm::dvec2 interpolatedUV = uvA + uvB + uvC;
+        i.setUVCoordinates(interpolatedUV);
+    }
     //If Vertex Colors
-    if(!this->parent->vertColors.empty()){
+    else if(!this->parent->vertColors.empty()){
         glm::dvec3 colorA = parent->vertColors[this->ids[0]] * fullBary[0];
         glm::dvec3 colorB = parent->vertColors[this->ids[1]] * fullBary[1];
         glm::dvec3 colorC = parent->vertColors[this->ids[2]] * fullBary[2];
