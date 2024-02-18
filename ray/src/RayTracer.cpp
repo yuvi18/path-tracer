@@ -92,7 +92,7 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	return color;
 }
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 // Do recursive ray tracing! You'll want to insert a lot of code here (or places
 // called from here) to handle reflection, refraction, etc etc.
