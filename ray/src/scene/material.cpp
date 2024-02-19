@@ -8,6 +8,9 @@ extern TraceUI *traceUI;
 #include <glm/gtx/io.hpp>
 #include <iostream>
 
+// Added this here.
+#include "../SceneObjects/trimesh.h"
+
 using namespace std;
 extern bool debugMode;
 
@@ -122,4 +125,35 @@ double MaterialParameter::intensityValue(const isect &is) const
   }
   else
     return (0.299 * _value[0]) + (0.587 * _value[1]) + (0.114 * _value[2]);
+}
+
+// ADDED METHOD: Compute tangent from triangle and normal.
+// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
+glm::dvec3 computeTangent(TrimeshFace *tri, const isect &is)
+{
+  glm::dvec3 normal = is.getN();
+  glm::dvec3 tangent = glm::dvec3();
+  double uv0 = is.getUVCoordinates().x;
+  double uv1 = is.getUVCoordinates().y;
+  return tangent;
+}
+
+// ADDED METHOD: Compute bitangent from triangle, normal, and tangent.
+glm::dvec3 computeBitangent()
+{
+  glm::dvec3 bitangent = glm::dvec3();
+  return bitangent;
+}
+
+// ADDED METHOD
+// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
+glm::dvec3 normalMap(TextureMap *normalMap, TrimeshFace *tri, const isect &is)
+{
+  // 1. sample color at current coordinates (0 to 1 space), convert it to a normal
+  // vector space (-1 to 1), which is the normal vector in tangent space
+  glm::dvec3 color(normalMap->getMappedValue(is.getUVCoordinates()));
+  glm::dvec3 mapN = color * 2.0 - 1.0;
+  // 2. use the edges of our triangle to find a tangent and bitangent vector using
+  // the triangle normal and edges
+  return glm::dvec3();
 }

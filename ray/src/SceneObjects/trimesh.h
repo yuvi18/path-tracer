@@ -15,9 +15,14 @@
 
 class TrimeshFace;
 
-class Trimesh : public SceneObject {
+class Trimesh : public SceneObject
+{
   friend class TrimeshFace;
+
   typedef std::vector<glm::dvec3> Normals;
+  typedef std::vector<glm::dvec3> Tangents;
+  typedef std::vector<glm::dvec3> Bitangents;
+
   typedef std::vector<glm::dvec3> Vertices;
   typedef std::vector<TrimeshFace *> Faces;
   typedef std::vector<glm::dvec3> VertColors;
@@ -25,16 +30,20 @@ class Trimesh : public SceneObject {
 
   Vertices vertices;
   Faces faces;
+
   Normals normals;
+  Tangents tangents;
+  Bitangents bitangents;
   VertColors vertColors;
   UVCoords uvCoords;
   BoundingBox localBounds;
-  BVH<TrimeshFace>* tree;
+  BVH<TrimeshFace> *tree;
 
 public:
   Trimesh(Scene *scene, Material *mat, MatrixTransform transform)
       : SceneObject(scene, mat), displayListWithMaterials(0),
-        displayListWithoutMaterials(0) {
+        displayListWithoutMaterials(0)
+  {
     this->transform = transform;
     vertNorms = false;
   }
@@ -48,6 +57,8 @@ public:
   // must add vertices, normals, and materials IN ORDER
   void addVertex(const glm::dvec3 &);
   void addNormal(const glm::dvec3 &);
+  void addTangent(const glm::dvec3 &);
+  void addBitangent(const glm::dvec3 &);
   void addColor(const glm::dvec3 &);
   void addUV(const glm::dvec2 &);
   bool addFace(int a, int b, int c);
@@ -57,16 +68,18 @@ public:
   void generateNormals();
   void buildTree();
 
-    bool hasBoundingBoxCapability() const { return true; }
+  bool hasBoundingBoxCapability() const { return true; }
 
-  BoundingBox ComputeLocalBoundingBox() {
+  BoundingBox ComputeLocalBoundingBox()
+  {
     BoundingBox localbounds;
     if (vertices.size() == 0)
       return localbounds;
     localbounds.setMax(vertices[0]);
     localbounds.setMin(vertices[0]);
     Vertices::const_iterator viter;
-    for (viter = vertices.begin(); viter != vertices.end(); ++viter) {
+    for (viter = vertices.begin(); viter != vertices.end(); ++viter)
+    {
       localbounds.setMax(glm::max(localbounds.getMax(), *viter));
       localbounds.setMin(glm::min(localbounds.getMin(), *viter));
     }
@@ -92,16 +105,20 @@ the SceneObject hierarchy.
 
 Access to materials and transform are provided by referencing the parent
 Trimesh object. */
-class TrimeshFace {
+class TrimeshFace
+{
   Trimesh *parent;
   int ids[3];
   glm::dvec3 normal;
+  glm::dvec3 tangent;
+  glm::dvec3 bitangent;
   double dist;
   BoundingBox bounds;
   glm::dmat2 AMat;
 
 public:
-  TrimeshFace(Trimesh *parent, int a, int b, int c) {
+  TrimeshFace(Trimesh *parent, int a, int b, int c)
+  {
     this->parent = parent;
     ids[0] = a;
     ids[1] = b;
@@ -119,7 +136,8 @@ public:
     if (glm::length(vab) == 0.0 || glm::length(vac) == 0.0 ||
         glm::length(vcb) == 0.0)
       degen = true;
-    else {
+    else
+    {
       degen = false;
       normal = glm::cross(b_coords - a_coords, c_coords - a_coords);
       normal = glm::normalize(normal);
@@ -142,6 +160,8 @@ public:
   int operator[](int i) const { return ids[i]; }
 
   glm::dvec3 getNormal() const { return normal; }
+  glm::dvec3 getTangent() const { return tangent; }
+  glm::dvec3 getBitangent() const { return bitangent; }
 
   bool intersect(ray &r, isect &i) const;
   bool intersectLocal(ray &r, isect &i) const;
@@ -149,7 +169,8 @@ public:
 
   bool hasBoundingBoxCapability() const { return true; }
 
-  BoundingBox ComputeLocalBoundingBox() {
+  BoundingBox ComputeLocalBoundingBox()
+  {
     BoundingBox localbounds;
     localbounds.setMax(
         glm::max(parent->vertices[ids[0]], parent->vertices[ids[1]]));
