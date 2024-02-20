@@ -247,7 +247,15 @@ Trimesh *parseTrimeshBody(const json &j, ParseData &pd)
                             ". Maybe the point doesn't exist?");
     }
   }
-
+  if(hasKey(j, "UV")){
+      cout <<"ok" << endl;
+      std::vector<double> UV;
+      for (const json &uv_json : j.at("UV"))
+      {
+          uv_json.get_to(UV);
+          t->addUV(glm::dvec2(UV[0], UV[1]));
+      }
+  }
   if (hasKey(j, "normals"))
   {
     glm::dvec3 normal;
