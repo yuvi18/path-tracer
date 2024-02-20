@@ -169,6 +169,7 @@ public:
 	}
 
 	virtual glm::dvec3 shade(Scene *scene, const ray &r, const isect &i) const;
+	virtual glm::dvec3 getDistortedNormal(Scene *scene, const ray &r, const isect &i) const;
 
 	Material &operator+=(const Material &m)
 	{
