@@ -22,8 +22,6 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
 {
   // TODO: Add some sort of normal mapping code here (replace i.getN()?)
   bool hasNormalMap = _normal; // ADDED FOR NORMAL MAP
-  cout << _kd.mapped() << endl;
-  cout << _kn.mapped() << endl;
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
   // Always add ambient light.
