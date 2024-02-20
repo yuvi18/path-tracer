@@ -35,4 +35,8 @@ We terminate early then the transmissive or reflective coefficents minute the co
 
 Since the threshold is an ordinary scalar, we take the l2 norm of the color coefficents (to standardize to a scalar).
 
-For normal mapping we...
+For normal mapping we did the following:
+- Added a new material property for normal maps.
+- Created a custom scene to test normal mapping.
+- Updated the parser to support reading a normal map texture in.
+- From the normal and face of a mesh, we compute a tangent and bitangent vector, and use them to distort the original normal in tangent space using values sampled from the map.
