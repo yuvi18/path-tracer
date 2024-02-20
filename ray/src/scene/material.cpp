@@ -21,11 +21,14 @@ Material::~Material() {}
 glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
 {
   // TODO: Add some sort of normal mapping code here (replace i.getN()?)
-  bool hasNormalMap = _normal; // ADDED FOR NORMAL MAP
-  // ADDED FOR NORMAL MAP
-  glm::dvec3 mapN = kn(i) * 2.0 - 1.0;
-  // distorted normal = normalMap.r * tangent + normalMap.g * bitangent + normalMap.b * normal
-  glm::dvec3 newN = mapN.r * i.triFace->getTangent() + mapN.g * i.triFace->getBitangent() + mapN.b * i.triFace->getNormal();
+    glm::dvec3 newN = i.getN();
+  bool hasNormalMap = _kn.mapped();
+  if(hasNormalMap){
+      // ADDED FOR NORMAL MAP
+      glm::dvec3 mapN = kn(i) * 2.0 - 1.0;
+      // distorted normal = normalMap.r * tangent + normalMap.g * bitangent + normalMap.b * normal
+      newN = mapN.r * i.getTangent() + mapN.g * i.getBiTangent() + mapN.b * i.getN();
+  }
 
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);

@@ -17,7 +17,6 @@
 
 class SceneObject;
 class isect;
-class TrimeshFace;
 
 /*
  * ray_thread_id: a thread local variable for statistical purpose.
@@ -81,7 +80,7 @@ public:
   }
 
   //This is hacky but why not
-  const TrimeshFace* triFace;
+
 
   void setObject(const SceneObject *o) { obj = o; }
 
@@ -91,6 +90,10 @@ public:
   // Get/Set surface normal at this intersection.
   void setN(const glm::dvec3 &n) { N = n; }
   glm::dvec3 getN() const { return N; }
+  void setTangent(const glm::dvec3 &t) { tangent = t; }
+  glm::dvec3 getTangent() const { return tangent; }
+  void setBiTangent(const glm::dvec3 &b) { bitangent = b; }
+  glm::dvec3 getBiTangent() const { return bitangent; }
 
   void setMaterial(const Material &m)
   {
@@ -133,6 +136,8 @@ private:
   glm::dvec3 N;
   glm::dvec2 uvCoordinates;
   glm::dvec3 bary;
+  glm::dvec3 tangent;
+  glm::dvec3 bitangent;
 
   // if this intersection has its own material (as opposed to one in its
   // associated object) as in the case where the material was interpolated

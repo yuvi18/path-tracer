@@ -17,6 +17,7 @@
 class Scene;
 class ray;
 class isect;
+class TrimeshFace;
 
 using std::string;
 
@@ -147,6 +148,7 @@ class Material
 {
 public:
 	// ADDED FOR NORMAL MAP: Constructor changed to include normal map property.
+	TrimeshFace* triFace;
 	Material()
 		: _ke(glm::dvec3(0.0, 0.0, 0.0)), _ka(glm::dvec3(0.0, 0.0, 0.0)),
 		  _ks(glm::dvec3(0.0, 0.0, 0.0)), _kd(glm::dvec3(0.0, 0.0, 0.0)),
