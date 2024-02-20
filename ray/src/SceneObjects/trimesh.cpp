@@ -233,6 +233,9 @@ void Trimesh::generateNormals()
 // ADDED FOR NORMAL MAP
 void Trimesh::generateTangentsAndBitangents()
 {
+    if(uvCoords.empty()){
+        return;
+    }
 	tangents.resize(normals.size());
 	bitangents.resize(normals.size());
 
