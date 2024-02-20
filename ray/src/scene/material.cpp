@@ -127,25 +127,9 @@ double MaterialParameter::intensityValue(const isect &is) const
     return (0.299 * _value[0]) + (0.587 * _value[1]) + (0.114 * _value[2]);
 }
 
-// ADDED METHOD: Compute tangent from triangle and normal.
-// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
-glm::dvec3 computeTangent(TrimeshFace *tri, const isect &is)
-{
-  glm::dvec3 normal = is.getN();
-  glm::dvec3 tangent = glm::dvec3();
-  double uv0 = is.getUVCoordinates().x;
-  double uv1 = is.getUVCoordinates().y;
-  return tangent;
-}
+/*
 
-// ADDED METHOD: Compute bitangent from triangle, normal, and tangent.
-glm::dvec3 computeBitangent()
-{
-  glm::dvec3 bitangent = glm::dvec3();
-  return bitangent;
-}
-
-// ADDED METHOD
+// ADDED FOR NORMAL MAP
 // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
 glm::dvec3 normalMap(TextureMap *normalMap, TrimeshFace *tri, const isect &is)
 {
@@ -157,3 +141,5 @@ glm::dvec3 normalMap(TextureMap *normalMap, TrimeshFace *tri, const isect &is)
   // the triangle normal and edges
   return glm::dvec3();
 }
+
+*/

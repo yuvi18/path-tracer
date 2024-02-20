@@ -30,10 +30,10 @@ class Trimesh : public SceneObject
 
   Vertices vertices;
   Faces faces;
-
   Normals normals;
-  Tangents tangents;
-  Bitangents bitangents;
+  Tangents tangents;     // ADDED FOR NORMAL MAP
+  Bitangents bitangents; // ADDED FOR NORMAL MAP
+
   VertColors vertColors;
   UVCoords uvCoords;
   BoundingBox localBounds;
@@ -57,8 +57,9 @@ public:
   // must add vertices, normals, and materials IN ORDER
   void addVertex(const glm::dvec3 &);
   void addNormal(const glm::dvec3 &);
-  void addTangent(const glm::dvec3 &);
-  void addBitangent(const glm::dvec3 &);
+  void addTangent(const glm::dvec3 &);   // ADDED FOR NORMAL MAP
+  void addBitangent(const glm::dvec3 &); // ADDED FOR NORMAL MAP
+
   void addColor(const glm::dvec3 &);
   void addUV(const glm::dvec2 &);
   bool addFace(int a, int b, int c);
@@ -66,6 +67,7 @@ public:
   const char *doubleCheck();
 
   void generateNormals();
+  void generateTangentsAndBitangents();
   void buildTree();
 
   bool hasBoundingBoxCapability() const { return true; }
@@ -110,8 +112,9 @@ class TrimeshFace
   Trimesh *parent;
   int ids[3];
   glm::dvec3 normal;
-  glm::dvec3 tangent;
-  glm::dvec3 bitangent;
+  glm::dvec3 tangent;   // ADDED FOR NORMAL MAP
+  glm::dvec3 bitangent; // ADDED FOR NORMAL MAP
+
   double dist;
   BoundingBox bounds;
   glm::dmat2 AMat;
