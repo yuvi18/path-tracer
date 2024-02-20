@@ -64,6 +64,13 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
   return finalShade;
 }
 
+glm::dvec3 Material::getDistortedNormal(Scene *scene, const ray &r, const isect &i) const
+{
+  glm::dvec3 vertNormalWorld = i.getN();
+  glm::dvec3 normalMap = kn(i) * 2.0 - 1.0;
+  return glm::dvec3();
+}
+
 TextureMap::TextureMap(string filename)
 {
   data = readImage(filename.c_str(), width, height);
