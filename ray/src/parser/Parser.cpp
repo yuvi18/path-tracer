@@ -902,7 +902,6 @@ string Parser::parseIdentExpression()
 double Parser::parseScalar()
 {
   unique_ptr<Token> scalar(_tokenizer.Read(SCALAR));
-
   return scalar->value();
 }
 
