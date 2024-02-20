@@ -123,6 +123,7 @@ Material parseMaterial(const json &j, ParseData &pd)
       m.setTransmissive(parseMaterialParameter(j.at("transmissive"), pd)));
   IGNORE_MISSING(m.setEmissive(parseMaterialParameter(j.at("emissive"), pd)));
   IGNORE_MISSING(m.setShininess(j.at("shininess").get<double>()));
+    IGNORE_MISSING(m.setNormal(parseMaterialParameter(j.at("normal"), pd)));
   IGNORE_MISSING(m.setIndex(j.at("index").get<double>()));
   return m;
 }
