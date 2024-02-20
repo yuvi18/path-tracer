@@ -40,3 +40,6 @@ For normal mapping we did the following:
 - Created a custom scene to test normal mapping.
 - Updated the parser to support reading a normal map texture in.
 - From the normal and face of a mesh, we compute a tangent and bitangent vector, and use them to distort the original normal in tangent space using values sampled from the map.
+To run the normal map, compare the scenes:
+    assets/custom/customNoNormalMap.json (normal mapping off)
+    assets/custom/customNormalMap.json (normal mapping on)
