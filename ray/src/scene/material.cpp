@@ -22,11 +22,10 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
 {
   // TODO: Add some sort of normal mapping code here (replace i.getN()?)
   bool hasNormalMap = _normal; // ADDED FOR NORMAL MAP
-
   // ADDED FOR NORMAL MAP
-  // 1. do we have a normal map?
-  glm::dvec3 normalMapData = kn(i) * 2.0 - 1.0;
+  glm::dvec3 mapN = kn(i) * 2.0 - 1.0;
   // distorted normal = normalMap.r * tangent + normalMap.g * bitangent + normalMap.b * normal
+  glm::dvec3 newN = mapN.r * i.triFace->getTangent() + mapN.g * i.triFace->getBitangent() + mapN.b * i.triFace->getNormal();
 
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
@@ -45,14 +44,14 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
     glm::dvec3 contributionD = pLight->shadowAttenuation(shadowRay, firePos);
     contributionD *= pLight->distanceAttenuation(pointOfImpact);
     contributionD *= kd(i);
-    contributionD *= glm::abs(glm::dot(i.getN(), pLight->getDirection(pointOfImpact)));
+    contributionD *= glm::abs(glm::dot(newN, pLight->getDirection(pointOfImpact)));
     diffuseTerm += contributionD;
     // Specular Term
     glm::dvec3 contributionS = pLight->shadowAttenuation(shadowRay, firePos);
     contributionS *= pLight->distanceAttenuation(pointOfImpact);
     contributionS *= ks(i);
     glm::dvec3 v = -1.0 * r.getDirection();
-    glm::dvec3 r = glm::reflect(-1.0 * pLight->getDirection(pointOfImpact), i.getN());
+    glm::dvec3 r = glm::reflect(-1.0 * pLight->getDirection(pointOfImpact), newN);
     contributionS *= glm::pow(glm::max(0.0, glm::dot(v, r)), shininess(i));
     specularTerm += contributionS;
   }
