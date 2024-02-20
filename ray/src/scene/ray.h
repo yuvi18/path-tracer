@@ -17,6 +17,7 @@
 
 class SceneObject;
 class isect;
+class TrimeshFace;
 
 /*
  * ray_thread_id: a thread local variable for statistical purpose.
@@ -78,6 +79,9 @@ public:
     copyFromOther(other);
     return *this;
   }
+
+  //This is hacky but why not
+  const TrimeshFace* triFace;
 
   void setObject(const SceneObject *o) { obj = o; }
 

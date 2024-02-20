@@ -194,6 +194,7 @@ bool TrimeshFace::intersectLocal(ray &r, isect &i) const
 
 	i.setT(t);
 	i.setObject(this->parent);
+	i.triFace = this;
 	return true;
 }
 
