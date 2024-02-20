@@ -22,10 +22,12 @@ using std::ostringstream;
    with
      tokenNames[ MY_TOKEN_NAME ] = "string representation";
 */
-string getNameForToken(const SYMBOL kind) {
+string getNameForToken(const SYMBOL kind)
+{
   static std::map<int, string> tokenNames;
 
-  if (tokenNames.empty()) {
+  if (tokenNames.empty())
+  {
     tokenNames[EOFSYM] = "EOF";
     tokenNames[SBT_RAYTRACER] = "SBT-raytracer";
     tokenNames[IDENT] = "Identifier";
@@ -83,6 +85,7 @@ string getNameForToken(const SYMBOL kind) {
     tokenNames[INDEX] = "index";
     tokenNames[NAME] = "name";
     tokenNames[MAP] = "map";
+    tokenNames[NORMAL] = "normal"; // ADDED FOR NORMAL MAP
   }
   // search tokenNames table
   std::map<int, string>::const_iterator itr = tokenNames.find(kind);
@@ -104,10 +107,12 @@ string getNameForToken(const SYMBOL kind) {
       reservedWords["regular17gon"] = SEVENTEENGON;
    to the list below.
 */
-SYMBOL lookupReservedWord(const string &ident) {
+SYMBOL lookupReservedWord(const string &ident)
+{
   static std::map<string, SYMBOL> reservedWords;
 
-  if (reservedWords.empty()) {
+  if (reservedWords.empty())
+  {
     reservedWords["ambient_light"] = AMBIENT_LIGHT;
     reservedWords["ambient"] = AMBIENT;
     reservedWords["aspectratio"] = ASPECTRATIO;
@@ -174,13 +179,15 @@ void Token::Print(ostream &out) const { out << toString(); }
 
 void Token::Print() const { Print(std::cout); }
 
-string IdentToken::toString() const {
+string IdentToken::toString() const
+{
   ostringstream oss(Token::toString());
   oss << ": \"" << _ident << "\"";
   return oss.str();
 }
 
-string ScalarToken::toString() const {
+string ScalarToken::toString() const
+{
   ostringstream oss(Token::toString());
   oss << ": " << _value;
   return oss.str();

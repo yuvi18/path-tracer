@@ -191,6 +191,7 @@ namespace tinyobj
     real_t specular[3];
     real_t transmittance[3];
     real_t emission[3];
+
     real_t shininess;
     real_t ior;      // index of refraction
     real_t dissolve; // 1 == opaque; 0 == fully transparent

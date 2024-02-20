@@ -24,7 +24,8 @@
    table in Token.cpp.
 */
 
-enum SYMBOL {
+enum SYMBOL
+{
   UNKNOWN, // Placeholder
   EOFSYM,  // End of file
   SBT_RAYTRACER,
@@ -92,14 +93,16 @@ enum SYMBOL {
   SHININESS,
   INDEX,
   NAME,
-  MAP
+  MAP,
+  NORMAL, // ADDED FOR NORMAL MAP
 };
 
 // Helper functions
 string getNameForToken(const SYMBOL kind);
 SYMBOL lookupReservedWord(const string &name);
 
-class Token {
+class Token
+{
 public:
   Token(SYMBOL kind) : _kind(kind) {}
 
@@ -107,11 +110,13 @@ public:
 
   // Note that these errors should not ever be encountered at runtime,
   // and signify parser bugs of some kind.
-  virtual std::string ident() const {
+  virtual std::string ident() const
+  {
     throw ParserFatalException("not an IdentToken");
     return std::string();
   }
-  virtual double value() const {
+  virtual double value() const
+  {
     throw ParserFatalException("not a ScalarToken");
     return 0.0;
   }
@@ -127,7 +132,8 @@ protected:
   const SYMBOL _kind;
 };
 
-class IdentToken : public Token {
+class IdentToken : public Token
+{
 public:
   IdentToken(std::string ident) : Token(IDENT), _ident(ident) {}
 
@@ -139,7 +145,8 @@ protected:
   const std::string _ident;
 };
 
-class ScalarToken : public Token {
+class ScalarToken : public Token
+{
 public:
   ScalarToken(double value) : Token(SCALAR), _value(value) {}
 
