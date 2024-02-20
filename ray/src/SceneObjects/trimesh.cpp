@@ -224,7 +224,10 @@ void Trimesh::generateNormals()
       normals[i] /= numFaces[i];
   }
   vertNorms = true;
-  generateTangentsAndBitangents(); // ADDED FOR NORMAL MAP
+  // ADDED FOR NORMAL MAP
+  // Once normals are computed, we can compute tangent and bitangent spaces
+  // for implementing a normal map.
+  generateTangentsAndBitangents();
 }
 
 // ADDED FOR NORMAL MAP
