@@ -20,7 +20,6 @@ Material::~Material() {}
 // the color of that point.
 glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
 {
-  // TODO: Add some sort of normal mapping code here (replace i.getN()?)
     glm::dvec3 newN = i.getN();
   bool hasNormalMap = _kn.mapped();
   if(hasNormalMap){
