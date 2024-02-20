@@ -41,8 +41,7 @@ bool Trimesh::addFace(int a, int b, int c)
   else
     delete newFace;
 
-  // Don't add faces to the scene's object list so we can cull by bounding
-  // box
+  // Don't add faces to the scene's object list so we can cull by bounding box.
   return true;
 }
 

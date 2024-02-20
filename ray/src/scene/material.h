@@ -248,7 +248,6 @@ public:
 		setBools();
 	}
 
-	// get booleans for reflection and refraction
 	bool Refl() const { return _refl; }
 	bool Trans() const { return _trans; }
 	bool Recur() const { return _recur; }
