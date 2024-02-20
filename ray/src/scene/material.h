@@ -24,7 +24,8 @@ using std::string;
 which consists of a bitmap and various accessors to it. To implement basic
 texture mapping, you'll want to fill in the getMappedValue function to
 implement basic texture mapping. */
-class TextureMap {
+class TextureMap
+{
 public:
   TextureMap(string filename);
 
@@ -50,7 +51,8 @@ protected:
   std::vector<uint8_t> data;
 };
 
-class TextureMapException {
+class TextureMapException
+{
 public:
   TextureMapException(string errorMsg) : _errorMsg(errorMsg) {}
   string message() { return _errorMsg; }
@@ -71,7 +73,8 @@ and the Material class is used often enough, that it is (somewhat) justifiable
 to do this.
 */
 
-class MaterialParameter {
+class MaterialParameter
+{
 public:
   explicit MaterialParameter(const glm::dvec3 &par)
       : _value(par), _textureMap(0) {}
@@ -83,36 +86,42 @@ public:
 
   MaterialParameter() : _value(0.0, 0.0, 0.0), _textureMap(0) {}
 
-  MaterialParameter &operator*=(const MaterialParameter &rhs) {
+  MaterialParameter &operator*=(const MaterialParameter &rhs)
+  {
     (*this) *= rhs._value;
     return *this;
   }
 
-  glm::dvec3 &operator*=(const glm::dvec3 &rhs) {
+  glm::dvec3 &operator*=(const glm::dvec3 &rhs)
+  {
     _value[0] *= rhs[0];
     _value[1] *= rhs[1];
     _value[2] *= rhs[2];
     return _value;
   }
 
-  glm::dvec3 &operator*=(const double rhs) {
+  glm::dvec3 &operator*=(const double rhs)
+  {
     _value[0] *= rhs;
     _value[1] *= rhs;
     _value[2] *= rhs;
     return _value;
   }
 
-  MaterialParameter &operator+=(const MaterialParameter &rhs) {
+  MaterialParameter &operator+=(const MaterialParameter &rhs)
+  {
     _value += rhs._value;
     return *this;
   }
 
-  void setValue(const glm::dvec3 &rhs) {
+  void setValue(const glm::dvec3 &rhs)
+  {
     _value = rhs;
     _textureMap = 0;
   }
 
-  void setValue(const double rhs) {
+  void setValue(const double rhs)
+  {
     _value[0] = rhs;
     _value[1] = rhs;
     _value[2] = rhs;
@@ -121,7 +130,8 @@ public:
 
   bool isZero() { return glm::length(_value) == 0.0; }
 
-  glm::dvec3 &operator+=(const glm::dvec3 &rhs) {
+  glm::dvec3 &operator+=(const glm::dvec3 &rhs)
+  {
     _value += rhs;
     return _value;
   }
@@ -138,7 +148,8 @@ private:
   TextureMap *_textureMap;
 };
 
-class Material {
+class Material
+{
 public:
   Material()
       : _ke(glm::dvec3(0.0, 0.0, 0.0)), _ka(glm::dvec3(0.0, 0.0, 0.0)),
@@ -153,13 +164,15 @@ public:
            const glm::dvec3 &d, const glm::dvec3 &r, const glm::dvec3 &t,
            double sh, double in)
       : _ke(e), _ka(a), _ks(s), _kd(d), _kr(r), _kt(t),
-        _shininess(glm::dvec3(sh, sh, sh)), _index(glm::dvec3(in, in, in)) {
+        _shininess(glm::dvec3(sh, sh, sh)), _index(glm::dvec3(in, in, in))
+  {
     setBools();
   }
 
   virtual glm::dvec3 shade(Scene *scene, const ray &r, const isect &i) const;
 
-  Material &operator+=(const Material &m) {
+  Material &operator+=(const Material &m)
+  {
     _ke += m._ke;
     _ka += m._ka;
     _ks += m._ks;
@@ -182,7 +195,8 @@ public:
   glm::dvec3 kd(const isect &i) const { return _kd.value(i); }
   glm::dvec3 kr(const isect &i) const { return _kr.value(i); }
   glm::dvec3 kt(const isect &i) const { return _kt.value(i); }
-  double shininess(const isect &i) const {
+  double shininess(const isect &i) const
+  {
     // Have to renormalize into the range 0-128 if it's texture
     // mapped.
     return _shininess.mapped() ? 128.0 * _shininess.intensityValue(i)
@@ -194,16 +208,19 @@ public:
   // setting functions accepting primitives (glm::dvec3 and double)
   void setEmissive(const glm::dvec3 &ke) { _ke.setValue(ke); }
   void setAmbient(const glm::dvec3 &ka) { _ka.setValue(ka); }
-  void setSpecular(const glm::dvec3 &ks) {
+  void setSpecular(const glm::dvec3 &ks)
+  {
     _ks.setValue(ks);
     setBools();
   }
   void setDiffuse(const glm::dvec3 &kd) { _kd.setValue(kd); }
-  void setReflective(const glm::dvec3 &kr) {
+  void setReflective(const glm::dvec3 &kr)
+  {
     _kr.setValue(kr);
     setBools();
   }
-  void setTransmissive(const glm::dvec3 &kt) {
+  void setTransmissive(const glm::dvec3 &kt)
+  {
     _kt.setValue(kt);
     setBools();
   }
@@ -215,15 +232,18 @@ public:
   void setAmbient(const MaterialParameter &ka) { _ka = ka; }
   void setSpecular(const MaterialParameter &ks) { _ks = ks; }
   void setDiffuse(const MaterialParameter &kd) { _kd = kd; }
-  void setReflective(const MaterialParameter &kr) {
+  void setReflective(const MaterialParameter &kr)
+  {
     _kr = kr;
     setBools();
   }
-  void setTransmissive(const MaterialParameter &kt) {
+  void setTransmissive(const MaterialParameter &kt)
+  {
     _kt = kt;
     setBools();
   }
-  void setShininess(const MaterialParameter &shininess) {
+  void setShininess(const MaterialParameter &shininess)
+  {
     _shininess = shininess;
   }
   void setIndex(const MaterialParameter &index) { _index = index; }
@@ -252,7 +272,8 @@ private:
   MaterialParameter _shininess;
   MaterialParameter _index; // index of refraction
 
-  void setBools() {
+  void setBools()
+  {
     _refl = !_kr.isZero();
     _trans = !_kt.isZero();
     _recur = _refl || _trans;
@@ -262,7 +283,8 @@ private:
 };
 
 // This doesn't necessarily make sense for mapped materials
-inline Material operator*(double d, Material m) {
+inline Material operator*(double d, Material m)
+{
   m._ke *= d;
   m._ka *= d;
   m._ks *= d;

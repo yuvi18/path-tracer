@@ -22,8 +22,8 @@ Trimesh::~Trimesh()
 // must add vertices, normals, and materials IN ORDER
 void Trimesh::addVertex(const glm::dvec3 &v) { vertices.emplace_back(v); }
 void Trimesh::addNormal(const glm::dvec3 &n) { normals.emplace_back(n); }
-void Trimesh::addTangent(const glm::dvec3 &t) { tangents.emplace_back(t) }
-void Trimesh::addBitangent(const glm::dvec3 &bt) { tangents.emplace_back(bt) }
+void Trimesh::addTangent(const glm::dvec3 &t) { tangents.emplace_back(t); }
+void Trimesh::addBitangent(const glm::dvec3 &bt) { tangents.emplace_back(bt); }
 
 void Trimesh::addColor(const glm::dvec3 &c) { vertColors.emplace_back(c); }
 void Trimesh::addUV(const glm::dvec2 &uv) { uvCoords.emplace_back(uv); }
