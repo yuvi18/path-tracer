@@ -25,8 +25,8 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
 
   // ADDED FOR NORMAL MAP
   // 1. do we have a normal map?
-  glm::dvec3 normalTex = kn(i) * 2.0 - 1.0;
-  // 2.
+  glm::dvec3 normalMapData = kn(i) * 2.0 - 1.0;
+  // distorted normal = normalMap.r * tangent + normalMap.g * bitangent + normalMap.b * normal
 
   glm::dvec3 pointOfImpact = r.at(i);
   glm::dvec3 finalShade(0, 0, 0);
@@ -62,13 +62,6 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
   finalShade += specularTerm;
   finalShade += ke(i);
   return finalShade;
-}
-
-glm::dvec3 Material::getDistortedNormal(Scene *scene, const ray &r, const isect &i) const
-{
-  glm::dvec3 vertNormalWorld = i.getN();
-  glm::dvec3 normalMap = kn(i) * 2.0 - 1.0;
-  return glm::dvec3();
 }
 
 TextureMap::TextureMap(string filename)
