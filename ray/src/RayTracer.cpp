@@ -48,7 +48,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	double dummy;
 	glm::dvec3 initialColorMulitplier(1.0, 1.0, 1.0);
 	glm::dvec3 ret =
-		traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
+		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
 }
@@ -201,6 +201,103 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 #endif
 	return colorC;
 }
+
+glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm::dvec3 colorMultiplier)
+{
+    isect i;
+    glm::dvec3 colorC;
+    printf("in tracePath\n");
+
+    if (depth < 0)
+    {
+        return glm::dvec3(0, 0, 0);
+    }
+    else if (scene->intersect(r, i))
+    {
+        printf("In intersect\n");
+        const Material &m = i.getMaterial();
+        colorC = m.shade(scene.get(), r, i);
+        printf("before indirect color\n");
+        glm::dvec3 indirectColor = glm::dvec3(0);
+        printf("Getting normal\n");
+        glm::dvec3 normal = i.getN();
+        printf("Getting tang\n");
+        glm::dvec3 tangent = i.getTangent();
+        printf("Getting biTan\n");
+        glm::dvec3 bitangent = i.getBiTangent();
+        bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
+        double d = 0;
+        if (insideMesh)
+        {
+            // Came out of transculenct material
+            glm::dvec3 startPos = r.getPosition();
+            glm::dvec3 endPos = r.at(i);
+            d = glm::distance(startPos, endPos);
+            colorMultiplier *= pow(m.kt(i), glm::dvec3(d));
+        }
+        glm::dvec3 startPos = r.at(i);
+
+        printf("creating matrix\n");
+
+        // coordinate system TODO: could be completely wrong
+        glm::dmat3 matrix = glm::dmat3 (tangent.x, normal.x, bitangent.x,
+                                        tangent.y, normal.y, bitangent.y,
+                                        tangent.z, normal.z, bitangent.z
+                                        );
+
+        // trace 10 random samples;
+        const int N = 10;
+        printf("Before for loop\n");
+        for (int i = 0; i < N; i ++) {
+            printf("In for loop\n");
+            //  Create a sample using the spherical to Cartesian coordinates equations. We will show in this chapter how this can be done in practice.
+            double r1 = rand(); // cos(theta)
+            double sinTheta = glm::sqrt(1 - r1 * r1);
+            double phi = rand() * 2 * M_PI;
+            float x = sinTheta * cos(phi);
+            float z = sinTheta * sin(phi);
+            glm::dvec3 randomDir = glm::dvec3(x, r1, z);
+
+            glm::dvec3 convertedRandomDir = matrix * randomDir;
+            convertedRandomDir = glm::normalize(convertedRandomDir);
+
+            ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+            printf("About to trace new ray\n");
+
+            indirectColor += r1 * tracePath(randomRay, thresh, depth - 1, colorMultiplier);
+        }
+        indirectColor /= 10 * (1 / (2 * M_PI));
+        colorC = (colorC / M_PI + glm::dvec3(2) * indirectColor) * m.kd(i);
+    }
+    else
+    {
+        printf("Missed intersection\n");
+        // No intersection. This ray travels to infinity, so we color
+        // it according to the background color, which in this (simple)
+        // case is just black.
+        //
+        // FIXME: Add CubeMap support here.
+        // TIPS: CubeMap object can be fetched from
+        // traceUI->getCubeMap();
+        //       Check traceUI->cubeMap() to see if cubeMap is loaded
+        //       and enabled.
+
+        // MY CODE HERE:
+        if (traceUI->getCubeMap())
+        {
+            // There is a cube map.
+            CubeMap* theMap = traceUI->getCubeMap();
+            colorC = theMap->getColor(r);
+        }
+        else
+        {
+            // THere is no cube map, return black.
+            colorC = glm::dvec3(0.0, 0.0, 0.0);
+        }
+    }
+    return colorC;
+}
+
 
 // Ignore for now.
 RayTracer::RayTracer()
