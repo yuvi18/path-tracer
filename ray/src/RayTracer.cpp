@@ -49,7 +49,8 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	double dummy;
 	glm::dvec3 initialColorMulitplier(1.0, 1.0, 1.0);
 	glm::dvec3 ret =
-		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
+//		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
+            traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
 }
@@ -271,7 +272,7 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
 
         indirectColor += r1 * tracePath(randomRay, thresh, depth - 1, colorMultiplier);
         indirectColor /=  (1 / (2 * M_PI));
-        colorC = (colorC / M_PI + glm::dvec3(2) * indirectColor) * m.kd(i);
+        colorC = (colorC / M_PI) + (glm::dvec3(2) * indirectColor) * m.kd(i);
     }
     else
     {
