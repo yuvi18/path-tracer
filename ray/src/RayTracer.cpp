@@ -21,6 +21,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <random>
 
 using namespace std;
 extern TraceUI *traceUI;
@@ -56,6 +57,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 // Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
+    int N = 100;
 	glm::dvec3 color(0, 0, 0);
 	if (!sceneLoaded())
 		return color;
@@ -66,12 +68,15 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 	{
 		double x = double(i) / double(buffer_width);
 		double y = double(j) / double(buffer_height);
-		color = trace(x, y);
+        for (int i = 0; i < N; i ++) {
+            color += trace(x, y);
+        }
+		color /= glm::dvec3(N);
 	}
 	else
 	{
 		// Sample NxN pixels and average the color.
-		int aaLevel = traceUI->getSuperSamples();
+        int aaLevel = traceUI->getSuperSamples();
 		double aaOffsetStep = 2.0 / double(aaLevel);
 		int samples = 0;
 		for (double xAaOffset = aaOffsetStep - 1; xAaOffset <= 1 - aaOffsetStep; xAaOffset += aaOffsetStep)
@@ -80,11 +85,13 @@ glm::dvec3 RayTracer::tracePixel(int i, int j)
 			for (double yAaOffset = aaOffsetStep - 1; yAaOffset <= 1 - aaOffsetStep; yAaOffset += aaOffsetStep)
 			{
 				double y = (double(j) + yAaOffset) / double(buffer_height);
-				color += trace(x, y);
-				samples += 1;
+                for (int i = 0; i < N; i ++) {
+                    color += trace(x, y);
+                    samples += 1;
+                }
 			}
 		}
-		color /= double(samples);
+		color /= glm::dvec3(samples);
 	}
 	pixel[0] = (int)(255.0 * color[0]);
 	pixel[1] = (int)(255.0 * color[1]);
@@ -206,7 +213,7 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
 {
     isect i;
     glm::dvec3 colorC;
-    printf("in tracePath\n");
+//    printf("in tracePath\n");
 
     if (depth < 0)
     {
@@ -214,16 +221,16 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
     }
     else if (scene->intersect(r, i))
     {
-        printf("In intersect\n");
+//        printf("In intersect\n");
         const Material &m = i.getMaterial();
         colorC = m.shade(scene.get(), r, i);
-        printf("before indirect color\n");
+//        printf("before indirect color\n");
         glm::dvec3 indirectColor = glm::dvec3(0);
-        printf("Getting normal\n");
+//        printf("Getting normal\n");
         glm::dvec3 normal = i.getN();
-        printf("Getting tang\n");
+//        printf("Getting tang\n");
         glm::dvec3 tangent = i.getTangent();
-        printf("Getting biTan\n");
+//        printf("Getting biTan\n");
         glm::dvec3 bitangent = i.getBiTangent();
         bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
         double d = 0;
@@ -237,7 +244,7 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         }
         glm::dvec3 startPos = r.at(i);
 
-        printf("creating matrix\n");
+//        printf("creating matrix\n");
 
         // coordinate system TODO: could be completely wrong
         glm::dmat3 matrix = glm::dmat3 (tangent.x, normal.x, bitangent.x,
@@ -246,32 +253,29 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
                                         );
 
         // trace 10 random samples;
-        const int N = 10;
-        printf("Before for loop\n");
-        for (int i = 0; i < N; i ++) {
-            printf("In for loop\n");
+//        printf("Before for loop\n");
+//            printf("In for loop\n");
             //  Create a sample using the spherical to Cartesian coordinates equations. We will show in this chapter how this can be done in practice.
-            double r1 = rand(); // cos(theta)
-            double sinTheta = glm::sqrt(1 - r1 * r1);
-            double phi = rand() * 2 * M_PI;
-            float x = sinTheta * cos(phi);
-            float z = sinTheta * sin(phi);
-            glm::dvec3 randomDir = glm::dvec3(x, r1, z);
+        double r1 = (double) rand() / (double)RAND_MAX; // cos(theta)
+        double sinTheta = glm::sqrt(1 - r1 * r1);
+        double phi =  (double) rand() / (double)RAND_MAX * 2 * M_PI;
+        float x = sinTheta * cos(phi);
+        float z = sinTheta * sin(phi);
+        glm::dvec3 randomDir = glm::dvec3(x, r1, z);
 
-            glm::dvec3 convertedRandomDir = matrix * randomDir;
-            convertedRandomDir = glm::normalize(convertedRandomDir);
+        glm::dvec3 convertedRandomDir = matrix * randomDir;
+        convertedRandomDir = glm::normalize(convertedRandomDir);
 
-            ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
-            printf("About to trace new ray\n");
+        ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+//            printf("About to trace new ray\n");
 
-            indirectColor += r1 * tracePath(randomRay, thresh, depth - 1, colorMultiplier);
-        }
-        indirectColor /= 10 * (1 / (2 * M_PI));
+        indirectColor += r1 * tracePath(randomRay, thresh, depth - 1, colorMultiplier);
+        indirectColor /=  (1 / (2 * M_PI));
         colorC = (colorC / M_PI + glm::dvec3(2) * indirectColor) * m.kd(i);
     }
     else
     {
-        printf("Missed intersection\n");
+//        printf("Missed intersection\n");
         // No intersection. This ray travels to infinity, so we color
         // it according to the background color, which in this (simple)
         // case is just black.
@@ -434,6 +438,14 @@ void RayTracer::traceSetup(int w, int h)
 	// FIXME: Additional initializations
 }
 
+void RayTracer::processChunk(int start, int end, int h) {
+    for (int i = start; i < end; i++) {
+        for (int j = 0; j < h; j++) {
+            tracePixel(i, j);
+        }
+    }
+}
+
 /*
  * RayTracer::traceImage
  *
@@ -456,13 +468,23 @@ void RayTracer::traceImage(int w, int h)
 	//
 	//       An asynchronous traceImage lets the GUI update your results
 	//       while rendering.
-	for (int i = 0; i < w; i++)
-	{
-		for (int j = 0; j < h; j++)
-		{
-			tracePixel(i, j);
-		}
-	}
+//	for (int i = 0; i < w; i++)
+//	{
+//        cout << i << endl;
+//		for (int j = 0; j < h; j++)
+//		{
+//            tracePixel(i, j);
+//        }
+//	}
+    int chunkSize = w / this->threads;
+    for (int t = 0; t < this->threads; t++) {
+        int start = t * chunkSize;
+        int end = (t == this->threads - 1) ? w : start + chunkSize; // Ensure last thread covers the remainder
+        threadsVec.emplace_back([this, start, end, h]() { this->processChunk(start, end, h); });
+    }
+
+    waitRender();
+
 }
 
 int RayTracer::aaImage()
@@ -494,6 +516,10 @@ void RayTracer::waitRender()
 	//        traceImage implementation.
 	//
 	// TIPS: Join all worker threads here.
+    for (auto &th : threadsVec) {
+        th.join();
+    }
+    threadsVec.clear();
 }
 
 // Done.

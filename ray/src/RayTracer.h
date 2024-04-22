@@ -33,6 +33,7 @@ public:
   glm::dvec3 traceRay(ray &r, const glm::dvec3 &thresh, int depth,
                       double &length, glm::dvec3 colorMultiplier);
   glm::dvec3 tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm::dvec3 colorMultiplier);
+  void processChunk(int start, int end, int h);
 
   glm::dvec3 getPixel(int i, int j);
   void setPixel(int i, int j, glm::dvec3 color);
@@ -70,6 +71,7 @@ private:
   int block_size;
   double aaThresh;
   int samples;
+  std::vector<std::thread> threadsVec;
 
 };
 
