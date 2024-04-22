@@ -49,8 +49,8 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	double dummy;
 	glm::dvec3 initialColorMulitplier(1.0, 1.0, 1.0);
 	glm::dvec3 ret =
-//		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
-            traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
+		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
+//            traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
 }
