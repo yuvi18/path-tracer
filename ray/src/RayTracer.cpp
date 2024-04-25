@@ -49,7 +49,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 	double dummy;
 	glm::dvec3 initialColorMulitplier(1.0, 1.0, 1.0);
 	glm::dvec3 ret =
-		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), initialColorMulitplier);
+		tracePath(r, glm::dvec3(1.0, 1.0, 1.0), 0, initialColorMulitplier);
 //            traceRay(r, glm::dvec3(1.0, 1.0, 1.0), traceUI->getDepth(), dummy, initialColorMulitplier);
 	ret = glm::clamp(ret, 0.0, 1.0);
 	return ret;
@@ -216,15 +216,19 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
     glm::dvec3 colorC;
 //    printf("in tracePath\n");
 
-    if (depth < 0)
-    {
-        return glm::dvec3(0, 0, 0);
-    }
-    else if (scene->intersect(r, i))
+//    if (depth < 0)
+//    {
+//        return glm::dvec3(0, 0, 0);
+//    }
+    if (scene->intersect(r, i))
     {
 //        printf("In intersect\n");
         const Material &m = i.getMaterial();
         colorC = m.shade(scene.get(), r, i);
+        double russianRoulette = (double) rand() / (double)RAND_MAX;
+        if (russianRoulette < 0.1) {
+            return colorC / glm::dvec3(0.1);
+        }
 //        printf("before indirect color\n");
         glm::dvec3 indirectColor = glm::dvec3(0);
 //        printf("Getting normal\n");
@@ -270,7 +274,7 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
 //            printf("About to trace new ray\n");
 
-        indirectColor += r1 * tracePath(randomRay, thresh, depth - 1, colorMultiplier);
+        indirectColor += r1 * tracePath(randomRay, thresh, depth + 1, colorMultiplier) / glm::dvec3(0.9);
         indirectColor /=  (1 / (2 * M_PI));
         colorC = (colorC / M_PI) + (glm::dvec3(2) * indirectColor) * m.kd(i);
     }
