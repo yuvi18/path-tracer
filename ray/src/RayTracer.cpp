@@ -227,7 +227,7 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         colorC = m.shade(scene.get(), r, i);
         double russianRoulette = (double) rand() / (double)RAND_MAX;
         if (russianRoulette < 0.1) {
-            return colorC / glm::dvec3(0.1);
+            return glm::dvec3(0);
         }
 //        printf("before indirect color\n");
         glm::dvec3 indirectColor = glm::dvec3(0);
