@@ -250,6 +250,12 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         glm::dvec3 startPos = r.at(i);
 
 //        printf("creating matrix\n");
+        glm::dvec3 Nt;
+        if (glm::abs(normal.x) > glm::abs(normal.y))
+            Nt = glm::dvec3(normal.z, 0, -normal.x) / glm::sqrt(normal.x * normal.x + normal.z * normal.z);
+        else
+            Nt = glm::dvec3(0, -normal.z, normal.y) / glm::sqrt (normal.y * normal.y + normal.z * normal.z);
+        glm::dvec3 Nb = glm::cross(normal, Nt);
 
         // coordinate system TODO: could be completely wrong
         glm::dmat3 matrix = glm::dmat3 (tangent.x, normal.x, bitangent.x,
@@ -260,23 +266,33 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         // trace 10 random samples;
 //        printf("Before for loop\n");
 //            printf("In for loop\n");
-            //  Create a sample using the spherical to Cartesian coordinates equations. We will show in this chapter how this can be done in practice.
+//              Create a sample using the spherical to Cartesian coordinates equations. We will show in this chapter how this can be done in practice.
         double r1 = (double) rand() / (double)RAND_MAX; // cos(theta)
         double sinTheta = glm::sqrt(1 - r1 * r1);
         double phi =  (double) rand() / (double)RAND_MAX * 2 * M_PI;
-        float x = sinTheta * cos(phi);
-        float z = sinTheta * sin(phi);
+        float x = sinTheta * glm::cos(phi);
+        float z = sinTheta * glm::sin(phi);
         glm::dvec3 randomDir = glm::dvec3(x, r1, z);
 
-        glm::dvec3 convertedRandomDir = matrix * randomDir;
+//        glm::dvec3 convertedRandomDir = matrix * randomDir;
+        glm:: dvec3 convertedRandomDir = glm::dvec3(
+                randomDir.x * Nb.x + randomDir.y * normal.x + randomDir.z * Nt.x,
+                randomDir.x * Nb.y + randomDir.y * normal.y + randomDir.z * Nt.y,
+                randomDir.x * Nb.z + randomDir.y * normal.z + randomDir.z * Nt.z
+        );
         convertedRandomDir = glm::normalize(convertedRandomDir);
 
         ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
 //            printf("About to trace new ray\n");
 
-        indirectColor += r1 * tracePath(randomRay, thresh, depth + 1, colorMultiplier) / glm::dvec3(0.9);
-        indirectColor /=  (1 / (2 * M_PI));
-        colorC = (colorC / M_PI) + (glm::dvec3(2) * indirectColor) * m.kd(i);
+        indirectColor += tracePath(randomRay, thresh, depth + 1, colorMultiplier) / (1 / (2 * M_PI));
+//        cout << indirectColor[0] << ", " << indirectColor[1] << ", " << indirectColor[2] << '\n' << endl;
+//        indirectColor /=  (1 / (2 * M_PI));
+//        colorC = (colorC / M_PI) + (indirectColor / M_PI) * m.kd(i) * glm::abs(glm::dot(normal, convertedRandomDir));
+        ray wIn = ray(startPos, -convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+        ray wOut = ray(r.at(i), -r.getDirection(), glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+        colorC = m.shadeBRDF(scene.get(), wIn, wOut, indirectColor, i);
+        colorC /= 0.9; // russian roulette
     }
     else
     {

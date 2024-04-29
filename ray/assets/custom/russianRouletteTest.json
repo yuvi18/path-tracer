@@ -17,18 +17,29 @@
     }
   },
   {
-    "translate": [
-      [0.0, 0.0, -1.0],
+    "directional_light": {
+      "direction": [0.0, -0.9, 0.1],
+      "color": [1.0, 1.0, 1.0]
+    }
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        -15.0, 1.0
+      ],
       [
         {
           "scale": [
-            [20.0, 20.0, 20.0],
+            [2.0, 2.0, 2.0],
             [
               {
-                "square": {
+                "sphere": {
                   "material": {
-                    "reflective": { "constant": [0.2, 0.2, 0.2] },
-                    "diffuse": { "constant": [0.0, 0.0, 0.7] }
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4
                   }
                 }
               }
@@ -40,63 +51,26 @@
   },
   {
     "translate": [
-      [0.0, 0.0, 1.0],
+      [0.0, -8.0, 3.0],
       [
         {
           "scale": [
-            [20.0, 20.0, 20.0],
+            [100.0, 20.0, 100.0],
             [
               {
-                "square": {
-                  "material": {
-                    "reflective": { "constant": [0.2, 0.2, 0.2] },
-                    "diffuse": { "constant": [0.0, 0.0, 0.7] }
-                  }
-                }
-              }
-            ]
-          ]
-        }
-      ]
-    ]
-  },
-  {
-    "translate": [
-      [1.0, 0.0, 0.0],
-      [
-        {
-          "scale": [
-            [20.0, 20.0, 20.0],
-            [
-              {
-                "square": {
-                  "material": {
-                    "reflective": { "constant": [0.2, 0.2, 0.2] },
-                    "diffuse": { "constant": [0.0, 0.0, 0.7] }
-                  }
-                }
-              }
-            ]
-          ]
-        }
-      ]
-    ]
-  },
-  {
-    "translate": [
-      [-1.0, 0.0, 0.0],
-      [
-        {
-          "scale": [
-            [20.0, 20.0, 20.0],
-            [
-              {
-                "square": {
-                  "material": {
-                    "reflective": { "constant": [0.2, 0.2, 0.2] },
-                    "diffuse": { "constant": [0.0, 0.0, 0.7] }
-                  }
-                }
+                "rotate": [
+                  [1.0, 0.0, 0.0],
+                  -1.57,
+                  [
+                    {
+                      "square": {
+                        "material": {
+                          "diffuse": { "constant": [1.0, 1.0, 1.0] }
+                        }
+                      }
+                    }
+                  ]
+                ]
               }
             ]
           ]

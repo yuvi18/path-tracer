@@ -65,6 +65,93 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
   return finalShade;
 }
 
+glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, const glm::dvec3 indirectColor, const isect &i) const {
+    glm::dvec3 n = i.getN();
+    glm::dvec3 retColor = glm::dvec3(0);
+    // wOut is View vector
+
+    glm::dvec3 diffuseBRDF = glm::dvec3 (0);
+
+    glm::dvec3 pointOfImpact = wOut.getPosition();
+    glm::dvec3 ambientTerm = ka(i) * scene->ambient();
+    glm::dvec3 specularTerm(0, 0, 0);
+
+    for (const auto &pLight : scene->getAllLights()) {
+        glm::dvec3 lightDir = pLight->getDirection(pointOfImpact);
+        glm::dvec3 H = lightDir + wOut.getDirection();
+        H = glm::normalize(H);
+
+        glm::dvec3 diffuseTerm(0, 0, 0);
+        glm::dvec3 firePos = pointOfImpact + i.getN() * RAY_EPSILON * 3.0;
+        glm::dvec3 fireDirection = pLight->getDirection(firePos);
+        glm::dvec3 fireWeight = glm::dvec3(1.0, 1.0, 1.0);
+        ray shadowRay(firePos, fireDirection, fireWeight, ray::SHADOW);
+
+        // Diffusion Term
+        glm::dvec3 contributionD = pLight->shadowAttenuation(shadowRay, firePos);
+        contributionD *= pLight->distanceAttenuation(pointOfImpact);
+        contributionD *= kd(i);
+        contributionD *= glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
+        diffuseTerm += contributionD / M_PI;
+
+        diffuseBRDF += diffuseTerm;
+
+        glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
+        glm::dvec3 schlickFresnel = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::dot(n, -wIn.getDirection())), 5);
+
+        // NDF term
+        double roughness = 0.25; // CHANGE THIS TO BE PARSED LATER
+        double alpha = roughness * roughness;
+        double alphaSquared = alpha * alpha;
+        double denom = M_PI * glm::pow((glm::pow(glm::dot(n, H), 2)) * (alphaSquared - 1) + 1, 2);
+        double normalTerm = alphaSquared / denom;
+
+        // Geometric term
+        double nDotv = glm::abs(glm::dot(n, wOut.getDirection()));
+        double k = alpha / 2;
+        double geomTerm = (nDotv) / (nDotv * (1 - k) + k);
+
+        specularTerm += ((schlickFresnel * normalTerm * geomTerm) / (4 * glm::dot(n, -wIn.getDirection()) * glm::dot(n, wOut.getDirection()))) * glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
+    }
+
+    // Indirect Light
+    glm::dvec3 H = -wIn.getDirection() + wOut.getDirection();
+    H = glm::normalize(H);
+//        cout <<"win: " << -wIn.getDirection() << '\n' << endl;
+//        cout << "n: " <<  n << '\n' << endl;
+//    if (indirectColor != glm::dvec3(0, 0, 0)) {
+//        cout << "indirect color: " << indirectColor << endl;
+//    }
+    diffuseBRDF += (kd(i) * indirectColor) * glm::abs(glm::dot(n, -wIn.getDirection())) / M_PI;
+
+    // Schlick Fresnel approx
+    glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
+    glm::dvec3 schlickFresnel = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::dot(n, -wIn.getDirection())), 5);
+
+
+    // NDF function
+    double roughness = 0.25; // CHANGE THIS TO BE PARSED LATER
+    double alpha = roughness * roughness;
+    double alphaSquared = alpha * alpha;
+    double denom = M_PI * glm::pow((glm::pow(glm::dot(n, H), 2)) * (alphaSquared - 1) + 1, 2);
+    double normalTerm = alphaSquared / denom;
+
+    // Geometric term
+    double nDotv = glm::abs(glm::dot(n, wOut.getDirection()));
+    double k = alpha / 2;
+    double geomTerm = (nDotv) / (nDotv * (1 - k) + k);
+
+    specularTerm += ((schlickFresnel * geomTerm * normalTerm) / (4 * glm::dot(n, -wIn.getDirection()) * glm::dot(n, wOut.getDirection()))) * glm::abs(glm::dot(n, -wIn.getDirection()));
+
+    retColor = diffuseBRDF;
+    retColor += ambientTerm;
+    retColor += specularTerm;
+
+
+    return retColor;
+
+}
+
 TextureMap::TextureMap(string filename)
 {
   data = readImage(filename.c_str(), width, height);
