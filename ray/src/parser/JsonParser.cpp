@@ -125,7 +125,8 @@ Material parseMaterial(const json &j, ParseData &pd)
   IGNORE_MISSING(m.setShininess(j.at("shininess").get<double>()));
     IGNORE_MISSING(m.setNormal(parseMaterialParameter(j.at("normal"), pd)));
   IGNORE_MISSING(m.setIndex(j.at("index").get<double>()));
-  return m;
+    IGNORE_MISSING(m.setMetallic(parseMaterialParameter(j.at("metallic"), pd)));
+    return m;
 }
 
 DirectionalLight *parseDirectionalLight(const json &j, ParseData &pd)

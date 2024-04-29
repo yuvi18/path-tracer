@@ -171,6 +171,7 @@ public:
 	}
 
 	virtual glm::dvec3 shade(Scene *scene, const ray &r, const isect &i) const;
+    virtual glm::dvec3 shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut,  const glm::dvec3 color, const isect &i) const;
 
 	Material &operator+=(const Material &m)
 	{
@@ -198,6 +199,8 @@ public:
 	glm::dvec3 kr(const isect &i) const { return _kr.value(i); }
 	glm::dvec3 kt(const isect &i) const { return _kt.value(i); }
 	glm::dvec3 kn(const isect &i) const { return _kn.value(i); } // ADDED FOR NORMAL MAP
+    glm::dvec3 kMetallic(const isect &i) const { return _kMetallic.value(i); }
+
 	double index(const isect &i) const { return _index.intensityValue(i); }
 	double shininess(const isect &i) const
 	{
@@ -226,8 +229,9 @@ public:
 	}
 	void setShininess(double shininess) { _shininess.setValue(shininess); }
 	void setIndex(double index) { _index.setValue(index); }
+    void setMetallic(const glm::dvec3 &kMetallic) { _kMetallic.setValue(kMetallic); }
 
-	// setting functions taking MaterialParameters
+    // setting functions taking MaterialParameters
 	void setEmissive(const MaterialParameter &ke) { _ke = ke; }
 	void setAmbient(const MaterialParameter &ka) { _ka = ka; }
 	void setSpecular(const MaterialParameter &ks) { _ks = ks; }
@@ -249,8 +253,10 @@ public:
 		_kn = kn;
 		setBools();
 	}
+    void setMetallic(const MaterialParameter &kMetallic) { _kMetallic = kMetallic; }
 
-	bool Refl() const { return _refl; }
+
+    bool Refl() const { return _refl; }
 	bool Trans() const { return _trans; }
 	bool Recur() const { return _recur; }
 	bool Spec() const { return _spec; }
@@ -265,6 +271,7 @@ private:
 	MaterialParameter _kr; // reflective
 	MaterialParameter _kt; // transmissive
 	MaterialParameter _kn; // normal (ADDED FOR NORMAL MAP)
+    MaterialParameter _kMetallic; // added for brdf
 
 	bool _refl;	  // specular reflector?
 	bool _trans;  // specular transmitter?
