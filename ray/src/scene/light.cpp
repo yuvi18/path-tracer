@@ -84,22 +84,27 @@ glm::dvec3 PointLight::shadowAttenuation(const ray &r,
     return light;
 }
 
+//Not done
 double RectangleAreaLight::distanceAttenuation(const glm::dvec3 &P) const {
     double distance = glm::distance(position, P);
     double denom = constantTerm + linearTerm * distance + quadraticTerm * glm::pow(distance, 2);
     return glm::min(1.0, 1 / denom);
 }
 
+//Done
 glm::dvec3 RectangleAreaLight::getColor() const { return color; }
 
+//Not done
 glm::dvec3 RectangleAreaLight::getDirection(const glm::dvec3 &P) const {
     return glm::normalize(position - P);
 }
 
+//Not done
 glm::dvec3 RectangleAreaLight::getRelativeDirection(const glm::dvec3 &P) const {
     return position - P;
 }
 
+//Not done
 glm::dvec3 RectangleAreaLight::shadowAttenuation(const ray &r,
                                          const glm::dvec3 &p) const {
     glm::dvec3 light = getColor();
