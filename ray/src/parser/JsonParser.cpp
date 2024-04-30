@@ -126,6 +126,7 @@ Material parseMaterial(const json &j, ParseData &pd)
     IGNORE_MISSING(m.setNormal(parseMaterialParameter(j.at("normal"), pd)));
   IGNORE_MISSING(m.setIndex(j.at("index").get<double>()));
     IGNORE_MISSING(m.setMetallic(parseMaterialParameter(j.at("metallic"), pd)));
+    IGNORE_MISSING(m.setRoughness(j.at("roughness").get<double>()));
     return m;
 }
 

@@ -154,7 +154,7 @@ public:
 		  _ks(glm::dvec3(0.0, 0.0, 0.0)), _kd(glm::dvec3(0.0, 0.0, 0.0)),
 		  _kr(glm::dvec3(0.0, 0.0, 0.0)), _kt(glm::dvec3(0.0, 0.0, 0.0)),
 		  _kn(glm::dvec3(0.0, 0.0, 0.0)),
-		  _refl(0), _trans(0), _recur(0), _spec(0), _both(0), _shininess(0.0),
+		  _refl(0), _trans(0), _recur(0), _spec(0), _both(0), _roughness(0.0), _shininess(0.0),
 		  _index(1.0) {}
 
 	virtual ~Material();
@@ -184,6 +184,8 @@ public:
 		_kn += m._kn; // ADDED FOR NORMAL MAP
 		_index += m._index;
 		_shininess += m._shininess;
+        _roughness += m._roughness;
+        _kMetallic += m._kMetallic;
 		return *this;
 	}
 
@@ -207,6 +209,7 @@ public:
 		// Have to renormalize into the range 0-128 if it's texture mapped.
 		return _shininess.mapped() ? 128.0 * _shininess.intensityValue(i) : _shininess.intensityValue(i);
 	}
+    double roughness(const isect &i) const { return _roughness.intensityValue(i); }
 
 	// setting functions accepting primitives (glm::dvec3 and double)
 	void setEmissive(const glm::dvec3 &ke) { _ke.setValue(ke); }
@@ -230,6 +233,7 @@ public:
 	void setShininess(double shininess) { _shininess.setValue(shininess); }
 	void setIndex(double index) { _index.setValue(index); }
     void setMetallic(const glm::dvec3 &kMetallic) { _kMetallic.setValue(kMetallic); }
+    void setRoughness(double roughness) { _roughness.setValue(roughness); }
 
     // setting functions taking MaterialParameters
 	void setEmissive(const MaterialParameter &ke) { _ke = ke; }
@@ -254,6 +258,7 @@ public:
 		setBools();
 	}
     void setMetallic(const MaterialParameter &kMetallic) { _kMetallic = kMetallic; }
+    void setRoughness(const MaterialParameter &roughness) { _roughness = roughness; }
 
 
     bool Refl() const { return _refl; }
@@ -282,6 +287,7 @@ private:
 
 	MaterialParameter _shininess;
 	MaterialParameter _index; // index of refraction
+    MaterialParameter _roughness;
 
 	void setBools()
 	{
