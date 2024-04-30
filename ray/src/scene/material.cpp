@@ -65,6 +65,29 @@ glm::dvec3 Material::shade(Scene *scene, const ray &r, const isect &i) const
   return finalShade;
 }
 
+double ggxGeometryFunction(const glm::dvec3& n, const glm::dvec3& x, double alpha) {
+    double nDotX = glm::abs(glm::dot(n, x));
+    double denom = nDotX + glm::sqrt((alpha * alpha) + (1 - (alpha * alpha)) * (nDotX * nDotX));
+    double ret = (2 * nDotX) / denom;
+    return ret;
+}
+
+glm::dvec3 fresnel(const glm::dvec3& F0, const glm::dvec3& V, const glm::dvec3& H) {
+//    cout << "f0: " << F0 << endl;
+//    cout << "V: " << V << endl;
+//    cout << "H: " << H << endl;
+    glm::dvec3 ret = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::abs(glm::dot(V, H))), 5);
+//    cout << "ret: " << ret << endl;
+    return ret;
+}
+
+double ndf(double alpha, const glm::dvec3& N, const glm::dvec3& H) {
+    double alphaSquared = alpha * alpha;
+    double nDotH = glm::abs(glm::dot(N, H));
+    double denom = glm::pow((glm::pow(nDotH, 2) * (alphaSquared - 1) + 1), 2) * M_PI;
+    return alphaSquared / denom;
+}
+
 glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, const glm::dvec3 indirectColor, const isect &i) const {
     glm::dvec3 n = i.getN();
     glm::dvec3 retColor = glm::dvec3(0);
@@ -75,6 +98,21 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
     glm::dvec3 pointOfImpact = wOut.getPosition();
     glm::dvec3 ambientTerm = ka(i) * scene->ambient();
     glm::dvec3 specularTerm(0, 0, 0);
+
+    double roughness = this->roughness(i);
+//    cout << "roughness: " << roughness << endl;
+    if (roughness == 0) {
+        roughness = 0.001;
+    }
+//    roughness = 0.1;
+    double alpha = roughness * roughness;
+    double alphaSquared = alpha * alpha;
+//    cout << "index: " << this->index(i) << endl;
+//    cout << "F0 calc: " << glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2) << endl;
+
+    glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
+    F0 = glm::mix(F0, this->kd(i), this->kMetallic(i)[0]);
+//    cout << "F0 Val: " << F0 << endl;
 
     for (const auto &pLight : scene->getAllLights()) {
         glm::dvec3 lightDir = pLight->getDirection(pointOfImpact);
@@ -93,60 +131,51 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
         contributionD *= kd(i);
         contributionD *= glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
         diffuseTerm += contributionD / M_PI;
+        diffuseTerm *= (1 - kMetallic(i)[0]);
 
         diffuseBRDF += diffuseTerm;
 
-        glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
-        glm::dvec3 schlickFresnel = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::dot(n, -wIn.getDirection())), 5);
+        // Fresnel term
+        glm::dvec3 schlickFresnel = fresnel(F0, wOut.getDirection(), H);
 
         // NDF term
-        double roughness = 0.25; // CHANGE THIS TO BE PARSED LATER
-        double alpha = roughness * roughness;
-        double alphaSquared = alpha * alpha;
-        double denom = M_PI * glm::pow((glm::pow(glm::dot(n, H), 2)) * (alphaSquared - 1) + 1, 2);
-        double normalTerm = alphaSquared / denom;
+        double normalTerm = ndf(alpha, n, H);
 
         // Geometric term
-        double nDotv = glm::abs(glm::dot(n, wOut.getDirection()));
-        double k = alpha / 2;
-        double geomTerm = (nDotv) / (nDotv * (1 - k) + k);
+        double geomTerm = ggxGeometryFunction(n, pLight->getDirection(pointOfImpact), alpha) * ggxGeometryFunction(n, wOut.getDirection(), alpha);
 
-        specularTerm += ((schlickFresnel * normalTerm * geomTerm) / (4 * glm::dot(n, -wIn.getDirection()) * glm::dot(n, wOut.getDirection()))) * glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
+        double nDotl = glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
+        glm::dvec3 specularContribution = ((schlickFresnel * normalTerm * geomTerm) / (4 * nDotl * glm::dot(n, wOut.getDirection())));
+        specularTerm +=  specularContribution * nDotl * pLight->getColor();
     }
 
     // Indirect Light
     glm::dvec3 H = -wIn.getDirection() + wOut.getDirection();
     H = glm::normalize(H);
-//        cout <<"win: " << -wIn.getDirection() << '\n' << endl;
-//        cout << "n: " <<  n << '\n' << endl;
-//    if (indirectColor != glm::dvec3(0, 0, 0)) {
-//        cout << "indirect color: " << indirectColor << endl;
-//    }
-    diffuseBRDF += (kd(i) * indirectColor) * glm::abs(glm::dot(n, -wIn.getDirection())) / M_PI;
+
+    diffuseBRDF += (kd(i) * indirectColor) * glm::abs(glm::dot(n, -wIn.getDirection())) / M_PI * (1 - this->kMetallic(i)[0]);
 
     // Schlick Fresnel approx
-    glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
-    glm::dvec3 schlickFresnel = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::dot(n, -wIn.getDirection())), 5);
-
+    glm::dvec3 schlickFresnel = fresnel(F0, wOut.getDirection(), H);
 
     // NDF function
-    double roughness = 0.25; // CHANGE THIS TO BE PARSED LATER
-    double alpha = roughness * roughness;
-    double alphaSquared = alpha * alpha;
-    double denom = M_PI * glm::pow((glm::pow(glm::dot(n, H), 2)) * (alphaSquared - 1) + 1, 2);
-    double normalTerm = alphaSquared / denom;
+    double normalTerm = ndf(alpha, n, H);
 
     // Geometric term
-    double nDotv = glm::abs(glm::dot(n, wOut.getDirection()));
-    double k = alpha / 2;
-    double geomTerm = (nDotv) / (nDotv * (1 - k) + k);
+    double geomTerm = ggxGeometryFunction(n, -wIn.getDirection(), alpha) * ggxGeometryFunction(n, wOut.getDirection(), alpha);
 
-    specularTerm += ((schlickFresnel * geomTerm * normalTerm) / (4 * glm::dot(n, -wIn.getDirection()) * glm::dot(n, wOut.getDirection()))) * glm::abs(glm::dot(n, -wIn.getDirection()));
+    double nDotl = glm::abs(glm::dot(n, -wIn.getDirection()));
+//    cout << "fresnel: " << schlickFresnel << endl;
+//    cout << "geom: " << geomTerm << endl;
+//    cout << "ndf" << normalTerm << endl;
+    glm::dvec3 indirectSpecular = ((schlickFresnel * geomTerm * normalTerm) / (4 * nDotl * glm::dot(n, wOut.getDirection()))) * nDotl * indirectColor;
+//    cout << indirectSpecular << endl;
+    specularTerm += indirectSpecular;
+//    cout << "end spec: " << specularTerm << endl;
 
     retColor = diffuseBRDF;
     retColor += ambientTerm;
     retColor += specularTerm;
-
 
     return retColor;
 
