@@ -153,8 +153,8 @@ public:
 		: _ke(glm::dvec3(0.0, 0.0, 0.0)), _ka(glm::dvec3(0.0, 0.0, 0.0)),
 		  _ks(glm::dvec3(0.0, 0.0, 0.0)), _kd(glm::dvec3(0.0, 0.0, 0.0)),
 		  _kr(glm::dvec3(0.0, 0.0, 0.0)), _kt(glm::dvec3(0.0, 0.0, 0.0)),
-		  _kn(glm::dvec3(0.0, 0.0, 0.0)),
-		  _refl(0), _trans(0), _recur(0), _spec(0), _both(0), _roughness(0.0), _shininess(0.0),
+		  _kn(glm::dvec3(0.0, 0.0, 0.0)), _kMetallic(glm::dvec3(0.0, 0.0, 0.0)),
+		  _refl(0), _trans(0), _recur(0), _spec(0), _both(0), _roughness(1.0), _shininess(0.0),
 		  _index(1.0) {}
 
 	virtual ~Material();
