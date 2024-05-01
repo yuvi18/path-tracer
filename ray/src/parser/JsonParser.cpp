@@ -151,6 +151,25 @@ PointLight *parsePointLight(const json &j, ParseData &pd)
                         atten_pow_2);
 }
 
+RectangleAreaLight *parseRectangleAreaLight(const json &j, ParseData &pd)
+{
+    glm::dvec3 color = j.at("color").get<glm::dvec3>();
+    glm::dvec3 position = j.at("position").get<glm::dvec3>();
+    glm::dvec3 u = j.at("u").get<glm::dvec3>();
+    glm::dvec3 v = j.at("v").get<glm::dvec3>();
+    double uL = j.at("uL").get<double>();
+    double vL = j.at("vL").get<double>();
+
+    float atten_pow_0 = 0.0f;
+    float atten_pow_1 = 0.0f;
+    float atten_pow_2 = 1.0f;
+    IGNORE_MISSING(j.at("constant_attenuation_coeff").get_to(atten_pow_0));
+    IGNORE_MISSING(j.at("linear_attenuation_coeff").get_to(atten_pow_1));
+    IGNORE_MISSING(j.at("quadratic_attenuation_coeff").get_to(atten_pow_2));
+
+    return new RectangleAreaLight(pd.s, position, u, v, uL, vL, color, atten_pow_0, atten_pow_1, atten_pow_2);
+}
+
 glm::dvec3 parseAmbientLight(const json &j)
 {
   glm::dvec3 color = j.at("color").get<glm::dvec3>();
@@ -462,6 +481,10 @@ Scene *JsonParser::parseScene()
     else if (key == "point_light")
     {
       scene->add(parsePointLight(val, pd));
+    }
+    else if (key == "rectangle_area_light")
+    {
+        scene->add(parseRectangleAreaLight(val, pd));
     }
     else if (isTransformKey(key))
     {
