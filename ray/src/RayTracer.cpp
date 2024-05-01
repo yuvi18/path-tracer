@@ -210,6 +210,15 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 	return colorC;
 }
 
+double ndfRay(double alpha, const glm::dvec3& N, const glm::dvec3& H) {
+    double alphaSquared = alpha * alpha;
+    double nDotH = glm::abs(glm::dot(N, H));
+    double denom = glm::pow((glm::pow(nDotH, 2) * (alphaSquared - 1) + 1), 2) * M_PI;
+    double ret = alphaSquared / denom;
+    return ret;
+}
+
+
 glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm::dvec3 colorMultiplier)
 {
     isect i;
@@ -229,14 +238,9 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         if (russianRoulette < 0.1) {
             return glm::dvec3(0);
         }
-//        printf("before indirect color\n");
         glm::dvec3 indirectColor = glm::dvec3(0);
 //        printf("Getting normal\n");
         glm::dvec3 normal = i.getN();
-//        printf("Getting tang\n");
-        glm::dvec3 tangent = i.getTangent();
-//        printf("Getting biTan\n");
-        glm::dvec3 bitangent = i.getBiTangent();
         bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
         double d = 0;
         if (insideMesh)
@@ -257,24 +261,25 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
             Nt = glm::dvec3(0, -normal.z, normal.y) / glm::sqrt (normal.y * normal.y + normal.z * normal.z);
         glm::dvec3 Nb = glm::cross(normal, Nt);
 
-        // coordinate system TODO: could be completely wrong
-        glm::dmat3 matrix = glm::dmat3 (tangent.x, normal.x, bitangent.x,
-                                        tangent.y, normal.y, bitangent.y,
-                                        tangent.z, normal.z, bitangent.z
-                                        );
 
-        // trace 10 random samples;
-//        printf("Before for loop\n");
-//            printf("In for loop\n");
-//              Create a sample using the spherical to Cartesian coordinates equations. We will show in this chapter how this can be done in practice.
         double r1 = (double) rand() / (double)RAND_MAX; // cos(theta)
+//        double r2 = (double) rand() / (double) RAND_MAX;
+//        double alpha_g = m.roughness(i) * m.roughness(i);
+//
+//        double theta_m = atan(alpha_g * sqrt(r1) / sqrt(1.0 - r1));
+//        double phi_m = 2.0 * M_PI * r2;
+//        glm::dvec3 randomDir = glm::dvec3(
+//                sin(theta_m) * cos(phi_m),
+//                sin(theta_m) * sin(phi_m),
+//                cos(theta_m)
+//                );
+//
         double sinTheta = glm::sqrt(1 - r1 * r1);
         double phi =  (double) rand() / (double)RAND_MAX * 2 * M_PI;
         float x = sinTheta * glm::cos(phi);
         float z = sinTheta * glm::sin(phi);
         glm::dvec3 randomDir = glm::dvec3(x, r1, z);
 
-//        glm::dvec3 convertedRandomDir = matrix * randomDir;
         glm:: dvec3 convertedRandomDir = glm::dvec3(
                 randomDir.x * Nb.x + randomDir.y * normal.x + randomDir.z * Nt.x,
                 randomDir.x * Nb.y + randomDir.y * normal.y + randomDir.z * Nt.y,
@@ -283,16 +288,24 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         convertedRandomDir = glm::normalize(convertedRandomDir);
 
         ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
-//            printf("About to trace new ray\n");
 
-        indirectColor += tracePath(randomRay, thresh, depth + 1, colorMultiplier) / (1 / (2 * M_PI));
-//        cout << indirectColor[0] << ", " << indirectColor[1] << ", " << indirectColor[2] << '\n' << endl;
-//        indirectColor /=  (1 / (2 * M_PI));
-//        colorC = (colorC / M_PI) + (indirectColor / M_PI) * m.kd(i) * glm::abs(glm::dot(normal, convertedRandomDir));
+        double pdf = 1 / (2 * M_PI);
+        indirectColor += tracePath(randomRay, thresh, depth + 1, colorMultiplier) / pdf;
+
         ray wIn = ray(startPos, -convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
-        ray wOut = ray(r.at(i), -r.getDirection(), glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+        ray wOut = ray(r.at(i), glm::normalize(-r.getDirection()), glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
         colorC = m.shadeBRDF(scene.get(), wIn, wOut, indirectColor, i);
+//        double fireReflection = (double) rand() / (double)RAND_MAX;
+//        if (m.roughness(i) < fireReflection) {
+//            glm::dvec3 reflDir = glm::reflect(r.getDirection(), normal);
+//            glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
+//            ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
+//            glm::dvec3 reflResult = tracePath(reflRay, thresh, depth + 1, colorMultiplier);
+//            colorC += reflResult;
+//            colorC /= 2;
+//        }
         colorC /= 0.9; // russian roulette
+        cout << "Color: " << colorC << endl;
     }
     else
     {
