@@ -73,11 +73,7 @@ double ggxGeometryFunction(const glm::dvec3& n, const glm::dvec3& x, double alph
 }
 
 glm::dvec3 fresnel(const glm::dvec3& F0, const glm::dvec3& V, const glm::dvec3& H) {
-//    cout << "f0: " << F0 << endl;
-//    cout << "V: " << V << endl;
-//    cout << "H: " << H << endl;
     glm::dvec3 ret = F0 + (glm::dvec3(1) - F0) * glm::pow((1 - glm::abs(glm::dot(V, H))), 5);
-//    cout << "ret: " << ret << endl;
     return ret;
 }
 
@@ -85,7 +81,8 @@ double ndf(double alpha, const glm::dvec3& N, const glm::dvec3& H) {
     double alphaSquared = alpha * alpha;
     double nDotH = glm::abs(glm::dot(N, H));
     double denom = glm::pow((glm::pow(nDotH, 2) * (alphaSquared - 1) + 1), 2) * M_PI;
-    return alphaSquared / denom;
+    double ret = alphaSquared / denom;
+    return ret;
 }
 
 glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, const glm::dvec3 indirectColor, const isect &i) const {
@@ -100,19 +97,16 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
     glm::dvec3 specularTerm(0, 0, 0);
 
     double roughness = this->roughness(i);
-//    cout << "roughness: " << roughness << endl;
     if (roughness == 0) {
         roughness = 0.001;
     }
-//    roughness = 0.1;
     double alpha = roughness * roughness;
     double alphaSquared = alpha * alpha;
-//    cout << "index: " << this->index(i) << endl;
-//    cout << "F0 calc: " << glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2) << endl;
 
     glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
-    F0 = glm::mix(F0, this->kd(i), this->kMetallic(i)[0]);
-//    cout << "F0 Val: " << F0 << endl;
+    if (this->kMetallic(i)[0] > 0) {
+        F0 = glm::mix(F0, this->kd(i), this->kMetallic(i)[0]);
+    }
 
     for (const auto &pLight : scene->getAllLights()) {
         glm::dvec3 lightDir = pLight->getDirection(pointOfImpact);
@@ -131,7 +125,7 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
         contributionD *= kd(i);
         contributionD *= glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
         diffuseTerm += contributionD / M_PI;
-        diffuseTerm *= (1 - kMetallic(i)[0]);
+        diffuseTerm *= (1 - this->kMetallic(i)[0]);
 
         diffuseBRDF += diffuseTerm;
 
@@ -165,20 +159,14 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
     double geomTerm = ggxGeometryFunction(n, -wIn.getDirection(), alpha) * ggxGeometryFunction(n, wOut.getDirection(), alpha);
 
     double nDotl = glm::abs(glm::dot(n, -wIn.getDirection()));
-//    cout << "fresnel: " << schlickFresnel << endl;
-//    cout << "geom: " << geomTerm << endl;
-//    cout << "ndf" << normalTerm << endl;
     glm::dvec3 indirectSpecular = ((schlickFresnel * geomTerm * normalTerm) / (4 * nDotl * glm::dot(n, wOut.getDirection()))) * nDotl * indirectColor;
-//    cout << indirectSpecular << endl;
     specularTerm += indirectSpecular;
-//    cout << "end spec: " << specularTerm << endl;
 
     retColor = diffuseBRDF;
     retColor += ambientTerm;
     retColor += specularTerm;
 
     return retColor;
-
 }
 
 TextureMap::TextureMap(string filename)
