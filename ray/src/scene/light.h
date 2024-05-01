@@ -121,6 +121,7 @@ public:
         generator = default_random_engine(rd());
         uDist = uniform_real_distribution<double>(0, uLength);
         vDist = uniform_real_distribution<double>(0, vLength);
+        center = uL / 2 * uVec + vL / 2 * vVec + corner;
     }
 
     virtual glm::dvec3 shadowAttenuation(const ray &r,
@@ -138,7 +139,7 @@ public:
     }
 
 protected:
-    glm::dvec3 position;
+    glm::dvec3 center;
     glm::dvec3 corner;
     glm::dvec3 uVec;
     glm::dvec3 vVec;
@@ -165,13 +166,7 @@ public:
 //    void glDrawLight() const;
 
 private:
-    glm::dvec3 samplePoint(){
-        glm::dvec3 randomPoint;
-        double uInterpolate = uDist(generator);
-        double vInterpolate = vDist(generator);
-        randomPoint = corner + uVec * uInterpolate + vVec + vInterpolate;
-        return randomPoint;
-    }
+    glm::dvec3 samplePoint() const;
 };
 
 #endif // __LIGHT_H__
