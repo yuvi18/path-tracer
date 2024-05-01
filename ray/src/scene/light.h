@@ -166,7 +166,7 @@ public:
 //    void glDrawLight() const;
 
 private:
-    glm::dvec3 samplePoint() const;
+    glm::dvec3 samplePoint();
 };
 
 #endif // __LIGHT_H__

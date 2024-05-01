@@ -102,7 +102,7 @@ glm::dvec3 RectangleAreaLight::getRelativeDirection(const glm::dvec3 &P) const {
     return center - P;
 }
 
-glm::dvec3 RectangleAreaLight::samplePoint() const{
+glm::dvec3 RectangleAreaLight::samplePoint(){
     glm::dvec3 randomPoint;
     double uInterpolate = uDist(generator);
     double vInterpolate = vDist(generator);
@@ -117,7 +117,7 @@ glm::dvec3 RectangleAreaLight::shadowAttenuation(const ray &r,
     //Sample 10 times
     for(int i = 0; i < 10; i++){
         glm::dvec3 light = getColor();
-        glm::dvec3 position = samplePoint();
+        glm::dvec3 position = const_cast<RectangleAreaLight*>(this)->samplePoint();
         double lightT = glm::sqrt(glm::dot(position - p, position - p));
         isect point;
         ray shadowRay(r.getPosition(), glm::normalize(position - r.getPosition()), r.getAtten(), ray::SHADOW);
