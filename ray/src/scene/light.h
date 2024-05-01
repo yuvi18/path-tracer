@@ -3,6 +3,7 @@
 
 #ifndef _WIN32
 #include <algorithm>
+#include <random>
 using std::max;
 using std::min;
 #endif
@@ -91,7 +92,6 @@ public:
 
 protected:
 	glm::dvec3 position;
-
 	// These three values are the a, b, and c in the distance attenuation function
 	// (from the slide labelled "Intensity drop-off with distance"):
 	//    f(d) = min( 1, 1/( a + b d + c d^2 ) )
@@ -109,14 +109,18 @@ protected:
 class RectangleAreaLight : public Light
 {
 public:
-    RectangleAreaLight(Scene *scene, const glm::dvec3 &pos, const glm::dvec3 &color,
+    RectangleAreaLight(Scene *scene, const glm::dvec3 &pos, const glm::dvec3 &u, const glm::dvec3 &v,
+                       double uL, double vL, const glm::dvec3 &color,
                float constantAttenuationTerm, float linearAttenuationTerm,
                float quadraticAttenuationTerm)
-            : Light(scene, color), position(pos),
+            : Light(scene, color), corner(pos), uVec(u), vVec(v), uLength(uL), vLength(vL),
               constantTerm(constantAttenuationTerm),
               linearTerm(linearAttenuationTerm),
               quadraticTerm(quadraticAttenuationTerm)
     {
+        generator = default_random_engine(rd());
+        uDist = uniform_real_distribution<double>(0, uLength);
+        vDist = uniform_real_distribution<double>(0, vLength);
     }
 
     virtual glm::dvec3 shadowAttenuation(const ray &r,
@@ -135,6 +139,17 @@ public:
 
 protected:
     glm::dvec3 position;
+    glm::dvec3 corner;
+    glm::dvec3 uVec;
+    glm::dvec3 vVec;
+    double uLength;
+    double vLength;
+
+    std::random_device rd;
+    std::default_random_engine generator; // rd() provides a random seed
+    std::uniform_real_distribution<double> uDist;
+    std::uniform_real_distribution<double> vDist;
+
 
     // These three values are the a, b, and c in the distance attenuation function
     // (from the slide labelled "Intensity drop-off with distance"):
@@ -149,6 +164,14 @@ public:
 //    void glDrawLight(GLenum lightID) const;
 //    void glDrawLight() const;
 
+private:
+    glm::dvec3 samplePoint(){
+        glm::dvec3 randomPoint;
+        double uInterpolate = uDist(generator);
+        double vInterpolate = vDist(generator);
+        randomPoint = corner + uVec * uInterpolate + vVec + vInterpolate;
+        return randomPoint;
+    }
 };
 
 #endif // __LIGHT_H__

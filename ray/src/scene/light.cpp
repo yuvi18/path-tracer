@@ -84,8 +84,9 @@ glm::dvec3 PointLight::shadowAttenuation(const ray &r,
     return light;
 }
 
-//Not done
+//Distance attenuation is done in shadow attenuation
 double RectangleAreaLight::distanceAttenuation(const glm::dvec3 &P) const {
+    return 1.0;
     double distance = glm::distance(position, P);
     double denom = constantTerm + linearTerm * distance + quadraticTerm * glm::pow(distance, 2);
     return glm::min(1.0, 1 / denom);
@@ -99,12 +100,12 @@ glm::dvec3 RectangleAreaLight::getDirection(const glm::dvec3 &P) const {
     return glm::normalize(position - P);
 }
 
-//Not done
+// Not used
 glm::dvec3 RectangleAreaLight::getRelativeDirection(const glm::dvec3 &P) const {
     return position - P;
 }
 
-//Not done
+//Ignore the ray that's passed in, and instead make 10 rays here
 glm::dvec3 RectangleAreaLight::shadowAttenuation(const ray &r,
                                          const glm::dvec3 &p) const {
     glm::dvec3 light = getColor();
