@@ -96,7 +96,7 @@
                     "shininess": 1034.4,
                     "roughness": 0.1,
                     "index" : 1.47,
-                    "metallic": {"constant":  [1.0, 0.0, 0.0]}
+                    "metallic": 1.0
                   }
                 }
               }

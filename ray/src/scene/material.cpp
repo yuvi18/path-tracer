@@ -104,8 +104,8 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
     double alphaSquared = alpha * alpha;
 
     glm::dvec3 F0 = glm::dvec3(glm::pow((1.0 - this->index(i)) / (1.0 + this->index(i)), 2));
-    if (this->kMetallic(i)[0] > 0) {
-        F0 = glm::mix(F0, this->kd(i), this->kMetallic(i)[0]);
+    if (this->kMetallic(i) > 0) {
+        F0 = glm::mix(F0, this->kd(i), this->kMetallic(i));
     }
 
     for (const auto &pLight : scene->getAllLights()) {
@@ -125,7 +125,7 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
         contributionD *= kd(i);
         contributionD *= glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
         diffuseTerm += contributionD / M_PI;
-        diffuseTerm *= (1 - this->kMetallic(i)[0]);
+        diffuseTerm *= (1 - this->kMetallic(i));
 
         diffuseBRDF += diffuseTerm;
 
@@ -147,7 +147,7 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
     glm::dvec3 H = -wIn.getDirection() + wOut.getDirection();
     H = glm::normalize(H);
 
-    diffuseBRDF += (kd(i) * indirectColor) * glm::abs(glm::dot(n, -wIn.getDirection())) / M_PI * (1 - this->kMetallic(i)[0]);
+    diffuseBRDF += (kd(i) * indirectColor) * glm::abs(glm::dot(n, -wIn.getDirection())) / M_PI * (1 - this->kMetallic(i));
 
     // Schlick Fresnel approx
     glm::dvec3 schlickFresnel = fresnel(F0, wOut.getDirection(), H);

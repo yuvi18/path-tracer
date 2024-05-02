@@ -153,7 +153,7 @@ public:
 		: _ke(glm::dvec3(0.0, 0.0, 0.0)), _ka(glm::dvec3(0.0, 0.0, 0.0)),
 		  _ks(glm::dvec3(0.0, 0.0, 0.0)), _kd(glm::dvec3(0.0, 0.0, 0.0)),
 		  _kr(glm::dvec3(0.0, 0.0, 0.0)), _kt(glm::dvec3(0.0, 0.0, 0.0)),
-		  _kn(glm::dvec3(0.0, 0.0, 0.0)), _kMetallic(glm::dvec3(0.0, 0.0, 0.0)),
+		  _kn(glm::dvec3(0.0, 0.0, 0.0)), _kMetallic(0.0),
 		  _refl(0), _trans(0), _recur(0), _spec(0), _both(0), _roughness(1.0), _shininess(0.0),
 		  _index(1.0) {}
 
@@ -201,7 +201,7 @@ public:
 	glm::dvec3 kr(const isect &i) const { return _kr.value(i); }
 	glm::dvec3 kt(const isect &i) const { return _kt.value(i); }
 	glm::dvec3 kn(const isect &i) const { return _kn.value(i); } // ADDED FOR NORMAL MAP
-    glm::dvec3 kMetallic(const isect &i) const { return _kMetallic.value(i); }
+    double kMetallic(const isect &i) const { return _kMetallic.intensityValue(i); }
 
 	double index(const isect &i) const { return _index.intensityValue(i); }
 	double shininess(const isect &i) const
@@ -232,7 +232,7 @@ public:
 	}
 	void setShininess(double shininess) { _shininess.setValue(shininess); }
 	void setIndex(double index) { _index.setValue(index); }
-    void setMetallic(const glm::dvec3 &kMetallic) { _kMetallic.setValue(kMetallic); }
+    void setMetallic(double kMetallic) { _kMetallic.setValue(kMetallic); }
     void setRoughness(double roughness) { _roughness.setValue(roughness); }
 
     // setting functions taking MaterialParameters
