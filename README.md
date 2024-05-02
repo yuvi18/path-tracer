@@ -8,6 +8,13 @@ We implemented the Cook-Torrance BRDF model, Russian Roulette path tracing, and 
 
 All of the scenes that test features can be found in pathTracer.
 
+## To Run
+- To run the code, cd into the ray directory then render it the exact same as the ray tracing project
+- If you don't know, that means 
+  - cd build
+  - make -j8
+  - ./bin/ray
+
 ## Scenes 
 The scenes we demonstrate are:
 
@@ -30,6 +37,9 @@ The scenes we demonstrate are:
 5. A pure metallic object that has a low roughness
 - assets/pathTracer/singleSphere.json with a cubemap
 - ![alt text](ray/lowroughnessHighMetallic.png)
+6. A modification of a famous path tracing scene called the cornell box for path tracing
+- assets/pathTracer/cornellBoxes.json
+- ![alt text](ray/cornellBoxImage.png)
 
 ## Code Navigation
 The relevant code we changed is in lights.h/cpp, RayTracer.cpp, and material.h/cpp.
