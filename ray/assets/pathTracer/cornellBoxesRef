@@ -1,0 +1,93 @@
+SBT-raytracer 1.0
+
+camera {
+	position = (0,1,-25);
+	viewdir = (0,0,1.0);
+	aspectratio = 1;
+	updir = (0,1,0);
+}
+/*
+directional_light {
+	direction = (0, 0, 1);
+	color = (1.0, 1.0, 1.0);
+}
+*/
+point_light
+{
+	position = (0, 9, 0);
+	color = (1, 1, 1);
+	constant_attenuation_coeff= 0.25;
+	linear_attenuation_coeff = 0.003372407;
+	quadratic_attenuation_coeff = 0.000045492;	
+}
+
+
+
+rotate(1,0,0,-1.57,
+translate( 3, -3, -5,
+rotate(0,0,1,0.4,
+scale( 6, 6, 12,
+	box {
+		material = { 
+				diffuse = (0.9,0.9,0.9);
+		}
+	} ) ) ) )
+	
+	
+rotate(1,0,0,-1.57,
+translate( -4, -1, -10,
+rotate(0,0,1,-0.3,
+scale( 6, 6, 12,
+	box {
+		material = { 
+				diffuse = (0.9,0.9,0.9);
+		}
+	} ) ) ) )
+
+translate( 0,0,10,
+	scale(21,
+		rotate(1,0,0,3.1415,
+		square { 
+			material = { 
+				diffuse = (0.9,0.9,0.9);
+			}})))
+
+translate( 0,-10.5,0,
+	scale(21,
+		rotate(1,0,0,-1.57,
+			square { 
+				material = { 
+					diffuse = (0.9,0.9,0.9);
+			}})))
+
+translate( 0,10.5,0,
+	scale(21,
+		rotate(1,0,0,-1.57,
+			square { 
+				material = { 
+					diffuse = (0.9,0.9,0.9);
+			}})))
+
+translate( 0,9.6,0,
+	scale(4,
+		rotate(1,0,0,-1.57,
+			square { 
+				material = { 
+					emissive = (1.0,1.0,1.0);
+			}})))
+
+translate( 10.2,0,0,
+	scale(21,
+		rotate(0,1,0,-1.57,
+			square { 
+				material = { 
+					diffuse = (0.9,0,0);
+			}})))
+
+translate( -10.2,0,0,
+	scale(21,
+		rotate(0,1,0,-1.57,
+			square { 
+				material = { 
+					diffuse = (0,0.9,0);
+			}})))

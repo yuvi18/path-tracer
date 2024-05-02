@@ -58,7 +58,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 // Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
-    int N = 40;
+    int N = 100;
 	glm::dvec3 color(0, 0, 0);
 	if (!sceneLoaded())
 		return color;
