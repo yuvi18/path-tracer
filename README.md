@@ -29,3 +29,9 @@ The relevant code we changed is in lights.h/cpp, RayTracer.cpp, and material.h/c
   - Added roughness and metallic parameters
   - Added a shadeBRDF function that uses the GGX normal distribution, the GGX geometry function, and the Schlick Fresnel function on every light source to get the color of the object
     - These are divided into helper functions that are called for every light source including the indirect light
+- Light class
+  - Added rectangular area lights
+    - Defined by a corner, two basis vectors, and two basis lengths
+    - Fires N shadow rays randomly into the area light then averages the result to create shoft shadows
+    - N is currently set to 10 but higher values of N create better soft shadows
+    - Shadow attenuates and distance attenuates the same as a point light
