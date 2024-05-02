@@ -1,0 +1,1125 @@
+[
+  {
+    "camera": {
+      "position": [0.0, 20.0, -40.0],
+      "viewdir": [0.0, -0.6, 1.0],
+      "updir": [0.0, 1.0, 0.0],
+      "aspectratio": 1.0
+    }
+  },
+  {
+    "directional_light": {
+      "direction": [0.0, 0.0, 1.0],
+      "color": [1.0, 1.0, 1.0]
+    }
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -15.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 0.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 0.2
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        -5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 0.4
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        0.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 0.6
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        5.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 0.8
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -10.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 1.0,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -5.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.8,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.6,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 5.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.4,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.2,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "transform": [
+      [
+        1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 0.0,
+        10.0, 1.0
+      ],
+      [
+        {
+          "scale": [
+            [2.0, 2.0, 2.0],
+            [
+              {
+                "sphere": {
+                  "material": {
+                    "ambient": { "constant": [0.5, 0.5, 0.5] },
+                    "diffuse": { "constant": [0.8, 0.2, 0.4] },
+                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1034.4,
+                    "roughness": 0.0,
+                    "index" : 1.47,
+                    "metallic": 1.0
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "translate": [
+      [0.0, -3.0, 3.0],
+      [
+        {
+          "scale": [
+            [100.0, 20.0, 100.0],
+            [
+              {
+                "rotate": [
+                  [1.0, 0.0, 0.0],
+                  -1.57,
+                  [
+                    {
+                      "square": {
+                        "material": {
+                          "diffuse": { "constant": [1.0, 1.0, 1.0] }
+                        }
+                      }
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  }
+]
