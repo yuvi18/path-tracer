@@ -58,7 +58,7 @@ glm::dvec3 RayTracer::trace(double x, double y)
 // Done.
 glm::dvec3 RayTracer::tracePixel(int i, int j)
 {
-    int N = 100;
+    int N = 10;
 	glm::dvec3 color(0, 0, 0);
 	if (!sceneLoaded())
 		return color;
@@ -210,28 +210,21 @@ glm::dvec3 RayTracer::traceRay(ray &r, const glm::dvec3 &thresh, int depth,
 	return colorC;
 }
 
-double ndfRay(double alpha, const glm::dvec3& N, const glm::dvec3& H) {
+double ndfRay(double alpha, glm::dvec3 H, glm::dvec3 N) {
     double alphaSquared = alpha * alpha;
-    double nDotH = glm::abs(glm::dot(N, H));
-    double denom = glm::pow((glm::pow(nDotH, 2) * (alphaSquared - 1) + 1), 2) * M_PI;
-    double ret = alphaSquared / denom;
+    double ndoth = glm::dot(N, H);
+//    double denom = glm::pow((glm::pow(nDotH, 2) * (alphaSquared - 1) + 1), 2) * M_PI;
+    double denom = M_PI * glm::pow((ndoth * ndoth) * (alphaSquared - 1) + 1, 2);
+    double ret = (alphaSquared) / denom;
     return ret;
 }
-
 
 glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm::dvec3 colorMultiplier)
 {
     isect i;
     glm::dvec3 colorC;
-//    printf("in tracePath\n");
-
-//    if (depth < 0)
-//    {
-//        return glm::dvec3(0, 0, 0);
-//    }
     if (scene->intersect(r, i))
     {
-//        printf("In intersect\n");
         const Material &m = i.getMaterial();
         colorC = m.shade(scene.get(), r, i);
         double russianRoulette = (double) rand() / (double)RAND_MAX;
@@ -239,7 +232,6 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
             return glm::dvec3(0);
         }
         glm::dvec3 indirectColor = glm::dvec3(0);
-//        printf("Getting normal\n");
         glm::dvec3 normal = i.getN();
         bool insideMesh = glm::dot(-r.getDirection(), normal) < 0;
         double d = 0;
@@ -253,7 +245,6 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
         }
         glm::dvec3 startPos = r.at(i);
 
-//        printf("creating matrix\n");
         glm::dvec3 Nt;
         if (glm::abs(normal.x) > glm::abs(normal.y))
             Nt = glm::dvec3(normal.z, 0, -normal.x) / glm::sqrt(normal.x * normal.x + normal.z * normal.z);
@@ -268,12 +259,16 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
 //
 //        double theta_m = atan(alpha_g * sqrt(r1) / sqrt(1.0 - r1));
 //        double phi_m = 2.0 * M_PI * r2;
+//        cout << "sin theta: " << sin(theta_m) << endl;
+//        cout << "cos phi: " << cos(phi_m) << endl;
+//        cout << "sin phi: " << sin(phi_m) << endl;
+//        cout << "cos theta: " << cos(theta_m) << endl;
 //        glm::dvec3 randomDir = glm::dvec3(
 //                sin(theta_m) * cos(phi_m),
-//                sin(theta_m) * sin(phi_m),
+//                sin(phi_m) * sin(theta_m),
 //                cos(theta_m)
 //                );
-//
+
         double sinTheta = glm::sqrt(1 - r1 * r1);
         double phi =  (double) rand() / (double)RAND_MAX * 2 * M_PI;
         float x = sinTheta * glm::cos(phi);
@@ -286,26 +281,32 @@ glm::dvec3 RayTracer::tracePath(ray &r, const glm::dvec3 &thresh, int depth, glm
                 randomDir.x * Nb.z + randomDir.y * normal.z + randomDir.z * Nt.z
         );
         convertedRandomDir = glm::normalize(convertedRandomDir);
+//        glm::dvec3 H = convertedRandomDir;
+//        glm::dvec3 V = -r.getDirection();
+//        glm::dvec3 L = 2 * glm::dot(V, H) * H - V;
+//        cout << "dot: " << glm::dot(convertedRandomDir, glm::reflect(r.getDirection(), normal)) << endl;
+//        cout << "dot2: " << glm::dot(convertedRandomDir, glm::reflect(r.getDirection(), normal)) << endl;
 
-        ray randomRay = ray(startPos, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
+        ray randomRay = ray(startPos + convertedRandomDir * RAY_EPSILON, convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
 
+//        double pdf = (ndfRay(alpha_g, H, normal) * glm::dot(normal, H)) / (4 * glm::abs(glm::dot(V, H)));
         double pdf = 1 / (2 * M_PI);
-        indirectColor += tracePath(randomRay, thresh, depth + 1, colorMultiplier) / pdf;
+        indirectColor += tracePath(randomRay, thresh, depth + 1, colorMultiplier);
+        indirectColor /= pdf;
 
         ray wIn = ray(startPos, -convertedRandomDir, glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
         ray wOut = ray(r.at(i), glm::normalize(-r.getDirection()), glm::dvec3(1.0, 1.0, 1.0), ray::VISIBILITY);
         colorC = m.shadeBRDF(scene.get(), wIn, wOut, indirectColor, i);
-//        double fireReflection = (double) rand() / (double)RAND_MAX;
-//        if (m.roughness(i) < fireReflection) {
-//            glm::dvec3 reflDir = glm::reflect(r.getDirection(), normal);
-//            glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
-//            ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
-//            glm::dvec3 reflResult = tracePath(reflRay, thresh, depth + 1, colorMultiplier);
-//            colorC += reflResult;
-//            colorC /= 2;
-//        }
+        double fireReflection = (double) rand() / (double)RAND_MAX;
+        if (m.roughness(i) < fireReflection) {
+            glm::dvec3 reflDir = glm::reflect(r.getDirection(), normal);
+            glm::dvec3 reflPos = r.at(i) + RAY_EPSILON * normal;
+            ray reflRay = ray(reflPos, reflDir, glm::dvec3(1.0, 1.0, 1.0), ray::REFLECTION);
+            glm::dvec3 reflResult = tracePath(reflRay, thresh, depth + 1, colorMultiplier);
+            colorC += reflResult;
+            colorC /= 2;
+        }
         colorC /= 0.9; // russian roulette
-        cout << "Color: " << colorC << endl;
     }
     else
     {
