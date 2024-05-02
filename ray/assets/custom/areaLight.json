@@ -11,10 +11,11 @@
     "rectangle_area_light": {
       "position": [0.0, 1.0, -15.0],
       "color": [1.0, 1.0, 1.0],
-      "u": [0.0, 15.0, 0.0],
+      "u": [0.0, 10.0, 0.0],
       "v": [0.0, 15.0, 10.0],
-      "uL": 10.0,
-      "vL": 10.0
+      "uL": 5.0,
+      "vL": 5.0,
+      "quadratic_attenuation_coeff": 0.0005
     }
   },
   {
@@ -35,9 +36,9 @@
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
                     "shininess": 1034.4,
-                    "roughness": 0.49,
+                    "roughness": 0.0,
                     "index" : 1.47,
-                    "metallic": 0.8
+                    "metallic": 1.0
                   }
                 }
               }
