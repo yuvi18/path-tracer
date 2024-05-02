@@ -62,3 +62,6 @@ The relevant code we changed is in lights.h/cpp, RayTracer.cpp, and material.h/c
     - Fires N shadow rays randomly into the area light then averages the result to create shoft shadows
     - N is currently set to 10 but higher values of N create better soft shadows
     - Shadow attenuates and distance attenuates the same as a point light
+
+## Extra Credit
+ - Both of us on our honor have completed the survey
