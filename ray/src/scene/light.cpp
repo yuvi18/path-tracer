@@ -114,7 +114,7 @@ glm::dvec3 RectangleAreaLight::samplePoint(){
 glm::dvec3 RectangleAreaLight::shadowAttenuation(const ray &r,
                                          const glm::dvec3 &p) const {
     glm::dvec3 finalLight(0, 0, 0);
-    //Sample 10 times
+    //Sample 20 times
     for(int i = 0; i < 10; i++){
         glm::dvec3 light = getColor();
         glm::dvec3 position = const_cast<RectangleAreaLight*>(this)->samplePoint();
