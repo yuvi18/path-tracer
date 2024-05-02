@@ -10,7 +10,8 @@ All of the scenes that test features can be found in pathTracer.
 
 ## To Run
 - To run the code, cd into the ray directory then render it the exact same as the ray tracing project
-- If you don't know, that means 
+- If you don't know, that means
+  - mkdir build
   - cd build
   - make -j8
   - ./bin/ray
