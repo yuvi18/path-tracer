@@ -8,13 +8,40 @@ We implemented the Cook-Torrance BRDF model, Russian Roulette path tracing, and 
 
 All of the scenes that test features can be found in pathTracer.
 
-The three scenes we demonstrate are:
+## To Run
+- To run the code, cd into the ray directory then render it the exact same as the ray tracing project
+- If you don't know, that means 
+  - cd build
+  - make -j8
+  - ./bin/ray
 
-1. A scene with smooth lighting / shadows
-2. A scene displaying different roughness, metallicness, etc. based on the Cook-Torrance BRDF model.
+## Scenes 
+The scenes we demonstrate are:
+
+
+1. A scene displaying different roughness, metallicness, etc. based on the Cook-Torrance BRDF model.
+- assets/pathTracer/spheres.json
 - The scene below demonstrates increasing metallicness and roughness from the bottom left being the least rough and metallic and increasing in metallic as the spheres go further away and increasing in roughness as the spheres are further to the right.
+- ![alt text](ray/spheresImage.png)
+- Below is the Whitted version (our best attempt at making the scene similar)
+- ![alt text](ray/whittedSpheresImage.png)
+2. The same scene as above but with a directional light so everything has even lighting
+- assets/pathTracer/spheresDirectional.json
+- ![alt text](ray/spheresDirectionalImage.png)
 3. A scene showcasing softer shadows with area lights.
+- assets/pathTracer/spheres.json (OLD SCENE)
+- ![alt text](ray/softShadows.png)
+4. Taking an old scene and using an area light while changing the center spheres metallic and roughness parameters
+- assets/pathTracer/hitchcockbrdf.json
+- ![alt text](ray/hitchcockbrdf.png)
+5. A pure metallic object that has a low roughness
+- assets/pathTracer/singleSphere.json with a cubemap
+- ![alt text](ray/lowroughnessHighMetallic.png)
+6. A modification of a famous path tracing scene called the cornell box for path tracing
+- assets/pathTracer/cornellBoxes.json
+- ![alt text](ray/cornellBoxImage.png)
 
+## Code Navigation
 The relevant code we changed is in lights.h/cpp, RayTracer.cpp, and material.h/cpp.
 
 - RayTracer class

@@ -35,8 +35,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 0.0
@@ -65,8 +65,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 0.0
@@ -95,8 +95,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 0.0
@@ -125,8 +125,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 0.0
@@ -155,7 +155,7 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -185,8 +185,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.0, 0.0, 0.0] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 0.0
@@ -215,8 +215,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 0.2
@@ -245,8 +246,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 0.2
@@ -275,8 +277,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 0.2
@@ -305,8 +308,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 0.2
@@ -335,7 +339,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -365,8 +370,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.2, 0.2, 0.2] },
+                    "reflective": { "constant": [0.2, 0.2, 0.2] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 0.2
@@ -395,8 +401,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 0.4
@@ -425,8 +432,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 0.4
@@ -455,8 +463,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 0.4
@@ -485,8 +494,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 0.4
@@ -515,7 +525,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -545,8 +556,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.4, 0.4, 0.4] },
+                    "reflective": { "constant": [0.4, 0.4, 0.4] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 0.4
@@ -575,8 +587,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 0.6
@@ -605,8 +618,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 0.6
@@ -635,8 +649,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 0.6
@@ -665,8 +680,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 0.6
@@ -695,7 +711,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -725,8 +742,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.6, 0.6, 0.6] },
+                    "reflective": { "constant": [0.6, 0.6, 0.6] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 0.6
@@ -755,8 +773,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 0.8
@@ -785,8 +804,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 0.8
@@ -815,8 +835,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 0.8
@@ -845,8 +866,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 0.8
@@ -875,7 +897,8 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -905,8 +928,9 @@
                   "material": {
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
-                    "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "specular": { "constant": [0.8, 0.8, 0.8] },
+                    "reflective": { "constant": [0.8, 0.8, 0.8] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 0.8
@@ -936,7 +960,8 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 200.4,
                     "roughness": 1.0,
                     "index" : 1.47,
                     "metallic": 1.0
@@ -966,7 +991,8 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 400.4,
                     "roughness": 0.8,
                     "index" : 1.47,
                     "metallic": 1.0
@@ -996,7 +1022,8 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 600.4,
                     "roughness": 0.6,
                     "index" : 1.47,
                     "metallic": 1.0
@@ -1026,7 +1053,8 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 800.4,
                     "roughness": 0.4,
                     "index" : 1.47,
                     "metallic": 1.0
@@ -1056,6 +1084,7 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
                     "shininess": 1034.4,
                     "roughness": 0.2,
                     "index" : 1.47,
@@ -1086,7 +1115,8 @@
                     "ambient": { "constant": [0.5, 0.5, 0.5] },
                     "diffuse": { "constant": [0.8, 0.2, 0.4] },
                     "specular": { "constant": [1.0, 1.0, 1.0] },
-                    "shininess": 1034.4,
+                    "reflective": { "constant": [1.0, 1.0, 1.0] },
+                    "shininess": 1200.4,
                     "roughness": 0.0,
                     "index" : 1.47,
                     "metallic": 1.0
