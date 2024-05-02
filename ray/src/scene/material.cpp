@@ -140,7 +140,7 @@ glm::dvec3 Material::shadeBRDF(Scene *scene, const ray &wIn, const ray &wOut, co
 
         double nDotl = glm::abs(glm::dot(n, pLight->getDirection(pointOfImpact)));
         glm::dvec3 specularContribution = ((schlickFresnel * normalTerm * geomTerm) / (4 * nDotl * glm::dot(n, wOut.getDirection())));
-        specularTerm +=  specularContribution * nDotl * pLight->getColor();
+        specularTerm +=  specularContribution * nDotl * pLight->distanceAttenuation(pointOfImpact);
     }
 
     // Indirect Light
